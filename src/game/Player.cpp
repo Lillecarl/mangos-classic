@@ -60,6 +60,7 @@
 #include "Mail.h"
 #include "DBCStores.h"
 #include "SQLStorages.h"
+#include "CPlayer.h"
 
 #include <cmath>
 
@@ -1086,6 +1087,8 @@ void Player::Update(uint32 update_diff, uint32 p_time)
 {
     if (!IsInWorld())
         return;
+
+    ToCPlayer()->CUpdate(update_diff);
 
     // Undelivered mail
     if (m_nextMailDelivereTime && m_nextMailDelivereTime <= time(NULL))

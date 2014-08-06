@@ -2205,11 +2205,12 @@ bool ChatHandler::HandleNpcRenameCommand(char* args)
     if (guid.GetHigh() != HIGHGUID_UNIT)
         PSendSysMessage("You must select a creature to rename!");
 
-    std::string name = args;
+    char* name = ExtractQuotedOrLiteralArg(&args);
+    if (!name)
+        return false;
 
-    WorldDatabase.escape_string(name);
-    WorldDatabase.PExecute("UPDATE creature_template SET name = '%s' WHERE entry = %u", name.c_str(), guid.GetEntry());
-    PSendSysMessage("Creature name update to %s", name.c_str());
+    WorldDatabase.PExecute("UPDATE creature_template SET Name = '%s' WHERE Entry = %u", name, guid.GetCounter());
+    PSendSysMessage("Creature name update to %s %u", name);
 
     return true;
 }
@@ -2220,11 +2221,12 @@ bool ChatHandler::HandleNpcResubnameCommand(char* args)
     if (guid.GetHigh() != HIGHGUID_UNIT)
         PSendSysMessage("You must select a creature to rename!");
 
-    std::string name = args;
+    char* name = ExtractQuotedOrLiteralArg(&args);
+    if (!name)
+        return false;
 
-    WorldDatabase.escape_string(name);
-    WorldDatabase.PExecute("UPDATE creature_template SET subname = '%s' WHERE entry = %u", name.c_str(), guid.GetEntry());
-    PSendSysMessage("Creature subname update to %s", name.c_str());
+    WorldDatabase.PExecute("UPDATE creature_template SET Subname = '%s' WHERE Entry = %u", name, guid.GetCounter());
+    PSendSysMessage("Creature subname update to %s %u", name, guid.GetCounter());
 
     return true;
 }
