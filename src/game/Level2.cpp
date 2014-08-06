@@ -2209,8 +2209,8 @@ bool ChatHandler::HandleNpcRenameCommand(char* args)
     if (!name)
         return false;
 
-    WorldDatabase.PExecute("UPDATE creature_template SET Name = '%s' WHERE Entry = %u", name, guid.GetCounter());
-    PSendSysMessage("Creature name update to %s %u", name);
+    WorldDatabase.PExecute("UPDATE creature_template SET Name = '%s' WHERE Entry = %u", name, guid.GetEntry());
+    PSendSysMessage("Creature name update to %s %u", name, guid.GetEntry());
 
     return true;
 }
@@ -2225,8 +2225,8 @@ bool ChatHandler::HandleNpcResubnameCommand(char* args)
     if (!name)
         return false;
 
-    WorldDatabase.PExecute("UPDATE creature_template SET Subname = '%s' WHERE Entry = %u", name, guid.GetCounter());
-    PSendSysMessage("Creature subname update to %s %u", name, guid.GetCounter());
+    WorldDatabase.PExecute("UPDATE creature_template SET Subname = '%s' WHERE Entry = %u", name, guid.GetEntry());
+    PSendSysMessage("Creature subname update to %s %u", name, guid.GetEntry());
 
     return true;
 }
