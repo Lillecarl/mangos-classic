@@ -2199,6 +2199,36 @@ bool ChatHandler::HandleNpcSubNameCommand(char* /*args*/)
     return true;
 }
 
+bool ChatHandler::HandleNpcRenameCommand(char* args)
+{
+    auto guid = m_session->GetPlayer()->GetTargetGuid();
+    if (guid.GetHigh() != HIGHGUID_UNIT)
+        PSendSysMessage("You must select a creature to rename!");
+
+    std::string name = args;
+
+    WorldDatabase.escape_string(name);
+    WorldDatabase.PExecute("UPDATE creature_template SET name = '%s' WHERE entry = %u", name.c_str(), guid.GetEntry());
+    PSendSysMessage("Creature name update to %s", name.c_str());
+
+    return true;
+}
+
+bool ChatHandler::HandleNpcResubnameCommand(char* args)
+{
+    auto guid = m_session->GetPlayer()->GetTargetGuid();
+    if (guid.GetHigh() != HIGHGUID_UNIT)
+        PSendSysMessage("You must select a creature to rename!");
+
+    std::string name = args;
+
+    WorldDatabase.escape_string(name);
+    WorldDatabase.PExecute("UPDATE creature_template SET subname = '%s' WHERE entry = %u", name.c_str(), guid.GetEntry());
+    PSendSysMessage("Creature subname update to %s", name.c_str());
+
+    return true;
+}
+
 // move item to other slot
 bool ChatHandler::HandleItemMoveCommand(char* args)
 {

@@ -51,6 +51,7 @@
 #include "movement/MoveSplineInit.h"
 #include "movement/MoveSpline.h"
 #include "CreatureLinkingMgr.h"
+#include "CPlayer.h"
 
 #include <math.h>
 #include <stdarg.h>
@@ -583,6 +584,18 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     uint32 health = pVictim->GetHealth();
     DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "deal dmg:%d to health:%d ", damage, health);
 
+    Player* attacker = GetCharmerOrOwnerPlayerOrPlayerItself();
+    Player* victim = pVictim->GetCharmerOrOwnerPlayerOrPlayerItself();
+
+    if (attacker && victim && damage && attacker != victim)
+    {
+        uint32 dmgNoOverkill = damage;
+
+        if (dmgNoOverkill - GetHealth() < 0)
+            dmgNoOverkill -= GetHealth();
+
+        victim->ToCPlayer()->AddDamage(attacker->GetObjectGuid(), dmgNoOverkill);
+    }
 
     // Rage from Damage made (only from direct weapon damage)
     if (cleanDamage && damagetype == DIRECT_DAMAGE && this != pVictim && GetTypeId() == TYPEID_PLAYER && GetPowerType() == POWER_RAGE && cleanDamage->attackType != RANGED_ATTACK)
@@ -633,6 +646,9 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     if (health <= damage)
     {
         DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamage %s Killed %s", GetGuidStr().c_str(), pVictim->GetGuidStr().c_str());
+
+        if (attacker && victim)
+            victim->ToCPlayer()->HandlePvPKill();
 
         /*
          *                      Preparation: Who gets credit for killing whom, invoke SpiritOfRedemtion?
@@ -5293,6 +5309,12 @@ void Unit::UnsummonAllTotems()
 int32 Unit::DealHeal(Unit* pVictim, uint32 addhealth, SpellEntry const* spellProto, bool critical)
 {
     int32 gain = pVictim->ModifyHealth(int32(addhealth));
+
+    Player* attacker = GetCharmerOrOwnerPlayerOrPlayerItself();
+    Player* victim = pVictim->GetCharmerOrOwnerPlayerOrPlayerItself();
+
+    if (attacker && victim && gain > 0 && attacker != victim)
+        victim->ToCPlayer()->AddDamage(attacker->GetObjectGuid(), uint32(gain));
 
     Unit* unit = this;
 

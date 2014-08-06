@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
 
 cmake_minimum_required(VERSION 2.8)
 
@@ -94,6 +95,8 @@ if(WIN32)
     set(DEP_ARCH x64)
   endif()
 endif()
+
+add_definitions("-std=c++11")
 
 # find Git: used to get the revision number
 find_package(Git)

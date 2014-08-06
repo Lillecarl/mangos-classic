@@ -827,6 +827,8 @@ class TradeData
         ObjectGuid m_items[TRADE_SLOT_COUNT];               // traded itmes from m_player side including non-traded slot
 };
 
+class CPlayer;
+
 class MANGOS_DLL_SPEC Player : public Unit
 {
         friend class WorldSession;
@@ -835,6 +837,8 @@ class MANGOS_DLL_SPEC Player : public Unit
     public:
         explicit Player(WorldSession* session);
         ~Player();
+
+        CPlayer* ToCPlayer() { return reinterpret_cast<CPlayer*>(this); }
 
         void CleanupsBeforeDelete() override;
 
