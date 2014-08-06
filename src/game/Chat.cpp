@@ -434,6 +434,7 @@ ChatCommand* ChatHandler::getCommandTable()
         //}
         { "rename",         SEC_GAMEMASTER, false, &ChatHandler::HandleNpcRenameCommand,                "", NULL },
         { "resubname",      SEC_GAMEMASTER, false, &ChatHandler::HandleNpcResubnameCommand,             "", NULL },
+        { "setcol",         SEC_GAMEMASTER, false, &ChatHandler::HandleNpcSetcolCommand,                "", NULL },
 
         { NULL,             0,                  false, NULL,                                           "", NULL }
     };
