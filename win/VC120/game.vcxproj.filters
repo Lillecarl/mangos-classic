@@ -490,6 +490,9 @@
     <ClCompile Include="..\..\src\game\Custom.cpp">
       <Filter>Custom</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\game\CChat.cpp">
+      <Filter>Custom</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\game\AccountMgr.h">

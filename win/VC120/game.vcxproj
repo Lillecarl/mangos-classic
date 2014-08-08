@@ -351,6 +351,7 @@
     <ClCompile Include="..\..\src\game\BattleGround\BattleGroundMgr.cpp" />
     <ClCompile Include="..\..\src\game\BattleGround\BattleGroundWS.cpp" />
     <ClCompile Include="..\..\src\game\Camera.cpp" />
+    <ClCompile Include="..\..\src\game\CChat.cpp" />
     <ClCompile Include="..\..\src\game\Channel.cpp" />
     <ClCompile Include="..\..\src\game\ChannelHandler.cpp" />
     <ClCompile Include="..\..\src\game\ChannelMgr.cpp" />

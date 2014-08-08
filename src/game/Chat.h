@@ -148,6 +148,12 @@ class MANGOS_DLL_SPEC ChatHandler
         void CheckIntegrity(ChatCommand* table, ChatCommand* parentCommand);
         ChatCommand* getCommandTable();
 
+        // Custom
+        bool HandleNpcRenameCommand(char* args);
+        bool HandleNpcResubnameCommand(char* args);
+        bool HandleNpcSetcolCommand(char* args);
+        // !Custom
+
         bool HandleAccountCommand(char* args);
         bool HandleAccountCharactersCommand(char* args);
         bool HandleAccountCreateCommand(char* args);
@@ -364,9 +370,6 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleNpcNameCommand(char* args);
         bool HandleNpcSubNameCommand(char* args);
         //----------------------------------------------------------
-        bool HandleNpcRenameCommand(char* args);
-        bool HandleNpcResubnameCommand(char* args);
-        bool HandleNpcSetcolCommand(char* args);
 
         bool HandlePDumpLoadCommand(char* args);
         bool HandlePDumpWriteCommand(char* args);
