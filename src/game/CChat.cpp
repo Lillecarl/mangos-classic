@@ -1,5 +1,8 @@
 #include "Chat.h"
 #include "Config/Config.h"
+#include "WorldSession.h"
+#include "Database/DatabaseEnv.h"
+#include "Player.h"
 
 bool ChatHandler::HandleNpcRenameCommand(char* args)
 {
