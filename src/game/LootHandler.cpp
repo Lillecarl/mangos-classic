@@ -232,7 +232,7 @@ void WorldSession::HandleLootMoneyOpcode(WorldPacket& /*recv_data*/)
     {
         pLoot->NotifyMoneyRemoved();
 
-        if (!guid.IsItem() && player->GetGroup())           // item can be looted only single player
+        /*if (!guid.IsItem() && player->GetGroup())           // item can be looted only single player
         {
             Group* group = player->GetGroup();
 
@@ -259,7 +259,7 @@ void WorldSession::HandleLootMoneyOpcode(WorldPacket& /*recv_data*/)
             }
         }
         else
-            player->ModifyMoney(pLoot->gold);
+            player->ModifyMoney(pLoot->gold);*/
 
         pLoot->gold = 0;
 
