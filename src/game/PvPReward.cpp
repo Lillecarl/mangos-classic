@@ -103,10 +103,13 @@ std::string CPlayer::GetRewardNames(bool duplicates)
         auto jtr = itr;
         std::advance(jtr, 1);
 
-        if (jtr == Names.end())
-            ss << " and ";
-        else if (itr != Names.begin())
-            ss << ", ";
+        if (itr != Names.begin())
+        {
+            if (jtr == Names.end())
+                ss << " and ";
+            else
+                ss << ", ";
+        }
 
         ss << *itr;
     }
