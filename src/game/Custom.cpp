@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "Custom.h"
 #include "ObjectAccessor.h"
+#include "ObjectMgr.h"
+#include "World.h"
 
 const std::string Custom::m_ClassColor[] =
 {
@@ -34,4 +36,62 @@ CPlayer* Custom::GetCPlayer(ObjectGuid guid, bool inWorld /*=true*/)
         return NULL;
 
     return static_cast<CPlayer*>(plr);
+}
+
+uint8 Custom::PickFakeRace(uint8 pclass, Team team)
+{
+    std::vector<uint8> playableRaces;
+
+    for (uint8 i = RACE_HUMAN; i <= RACE_TROLL; ++i)
+    {
+        if (i == RACE_GOBLIN)
+            continue;
+
+        PlayerInfo const* info = sObjectMgr.GetPlayerInfo(i, pclass);
+        if (!info)
+            continue;
+
+        if (Player::TeamForRace(i) == team)
+            continue;
+
+        playableRaces.push_back(i);
+    }
+
+    return playableRaces[urand(0, playableRaces.size() - 1)];
+}
+
+void Custom::LoadFakePlayerBytes()
+{
+    uint32 count = 0;
+
+    QueryResult* result = WorldDatabase.PQuery("SELECT race, maleBytes, maleBytes2, femaleBytes, femaleBytes2 FROM fakeplayerbytes");
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+
+            FakePlayerBytes bytes;
+
+            uint8 race = fields[0].GetUInt8();
+            bytes.PlayerBytes[GENDER_MALE] = fields[1].GetUInt32();
+            bytes.PlayerBytes2[GENDER_MALE] = fields[2].GetUInt32();
+            bytes.PlayerBytes[GENDER_FEMALE] = fields[3].GetUInt32();
+            bytes.PlayerBytes2[GENDER_FEMALE] = fields[4].GetUInt32();
+
+            m_FakePlayerBytesContainer.insert(std::make_pair(race, bytes));
+
+            if (race && bytes.PlayerBytes[GENDER_MALE] && bytes.PlayerBytes2[GENDER_MALE] &&
+                bytes.PlayerBytes[GENDER_FEMALE] && bytes.PlayerBytes[GENDER_FEMALE])
+                ++count;
+        } while (result->NextRow());
+    }
+
+    if (sWorld.getConfig(CONFIG_BOOL_CFBG_ENABLED) && (count < 10 || !result))
+    {
+        const char* message = "There was something wrong with loading fakeplayerbytes for crossfaction battlegrounds!";
+        sLog.outError(message);
+        sLog.outErrorDb(message);
+        std::exit(EXIT_FAILURE);
+    }
 }

@@ -427,6 +427,9 @@ large groups are disadvantageous, because they will be kicked first if invitatio
 */
 void BattleGroundQueue::FillPlayersToBG(BattleGround* bg, BattleGroundBracketId bracket_id)
 {
+    if (MixPlayersToBG(bg, bracket_id))
+        return;
+
     int32 hordeFree = bg->GetFreeSlotsForTeam(HORDE);
     int32 aliFree   = bg->GetFreeSlotsForTeam(ALLIANCE);
 
@@ -697,7 +700,8 @@ void BattleGroundQueue::Update(BattleGroundTypeId bgTypeId, BattleGroundBracketI
     // now check if there are in queues enough players to start new game of (normal battleground)
     {
         // if there are enough players in pools, start new battleground or non rated arena
-        if (CheckNormalMatch(bracket_id, MinPlayersPerTeam, MaxPlayersPerTeam))
+        if (CheckNormalMatch(bracket_id, MinPlayersPerTeam, MaxPlayersPerTeam) ||
+            CheckMixedMatch(bg_template, bracket_id, MinPlayersPerTeam, MaxPlayersPerTeam))
         {
             // we successfully created a pool
             BattleGround* bg2 = sBattleGroundMgr.CreateNewBattleGround(bgTypeId, bracket_id);
@@ -1264,7 +1268,7 @@ void BattleGroundMgr::SendToBattleGround(Player* pl, uint32 instanceId, BattleGr
     {
         uint32 mapid = bg->GetMapId();
         float x, y, z, O;
-        Team team = pl->GetBGTeam();
+        Team team = pl->GetTeam();
         if (team == 0)
             team = pl->GetTeam();
         bg->GetTeamStartLoc(team, x, y, z, O);

@@ -35,6 +35,7 @@
 #include "Util.h"
 #include "GridNotifiersImpl.h"
 #include "CellImpl.h"
+#include "CPlayer.h"
 
 bool WorldSession::processChatmessageFurtherAfterSecurityChecks(std::string& msg, uint32 lang)
 {
@@ -164,6 +165,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recv_data)
 
             if (msg.empty())
                 break;
+
+            if (!GetPlayer()->isGameMaster())
+            if (GetPlayer()->ToCPlayer()->SendBattleGroundChat(ChatMsg(type), msg))
+                return;
 
             if (type == CHAT_MSG_SAY)
                 GetPlayer()->Say(msg, lang);

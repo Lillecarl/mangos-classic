@@ -403,7 +403,7 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket& recv_data)
             // set the destination instance id
             _player->SetBattleGroundId(bg->GetInstanceID(), bgTypeId);
             // set the destination team
-            _player->SetBGTeam(ginfo.GroupTeam);
+            _player->SetTeam(ginfo.GroupTeam);
             // bg->HandleBeforeTeleportToBattleGround(_player);
             sBattleGroundMgr.SendToBattleGround(_player, ginfo.IsInvitedToBGInstanceGUID, bgTypeId);
             // add only in HandleMoveWorldPortAck()

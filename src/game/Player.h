@@ -1631,7 +1631,7 @@ class MANGOS_DLL_SPEC Player : public Unit
         void CheckAreaExploreAndOutdoor();
 
         static Team TeamForRace(uint8 race);
-        Team GetTeam() const { return m_team; }
+        Team GetOTeam() const { return m_team; }
         static uint32 getFactionForRace(uint8 race);
         void setFactionForRace(uint8 race);
 
@@ -1863,8 +1863,8 @@ class MANGOS_DLL_SPEC Player : public Unit
         WorldLocation const& GetBattleGroundEntryPoint() const { return m_bgData.joinPos; }
         void SetBattleGroundEntryPoint(Player* leader = NULL);
 
-        void SetBGTeam(Team team) { m_bgData.bgTeam = team; m_bgData.m_needSave = true; }
-        Team GetBGTeam() const { return m_bgData.bgTeam ? m_bgData.bgTeam : GetTeam(); }
+        void SetTeam(Team team) { m_bgData.bgTeam = team; m_bgData.m_needSave = true; }
+        Team GetTeam() const/* { return m_bgData.bgTeam ? m_bgData.bgTeam : GetOTeam(); }*/;
 
         void LeaveBattleground(bool teleportToEntryPoint = true);
         bool CanJoinToBattleground() const;

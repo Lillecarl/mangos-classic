@@ -4,6 +4,17 @@
 CPlayer::CPlayer(WorldSession* session) : Player(session)
 {
     m_PendingReward = 0;
+
+    m_fRace = 0;
+    m_oRace = 0;
+    m_fFaction = 0;
+    m_oFaction = 0;
+    m_oPlayerBytes = 0;
+    m_oPlayerBytes2 = 0;
+    m_fPlayerBytes = 0;
+    m_fPlayerBytes2 = 0;
+    m_Recache = 0;
+    m_FakeOnNextTick = 0;
 }
 
 void CPlayer::CUpdate(uint32 diff)
@@ -55,4 +66,53 @@ std::string CPlayer::GetNameLink(bool applycolors)
         ss << "[" << name << "]|h";
 
     return ss.str();
+}
+
+uint32 CPlayer::GetAVGILevel(bool levelasmin)
+{
+    uint32 TotLevel = 0;
+    uint8 ItemCount = 0;
+
+    for (uint8 i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
+    {
+        // Ignore these, because either they do not matter to the calculation
+        // or they're allowed to be swapped during the game.
+        if (i == EQUIPMENT_SLOT_MAINHAND || i == EQUIPMENT_SLOT_OFFHAND ||
+            i == EQUIPMENT_SLOT_RANGED || i == EQUIPMENT_SLOT_TABARD ||
+            i == EQUIPMENT_SLOT_BODY)
+            continue;
+
+        ++ItemCount;
+
+        if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+            TotLevel += pItem->GetProto()->ItemLevel;
+    }
+
+    uint32 avg = TotLevel / ItemCount;
+
+    if (!levelasmin)
+        return avg;
+
+    return (avg > getLevel() ? avg : getLevel());
+}
+
+void CPlayer::Sometimes()
+{
+    if (GetRecache())
+    {
+        RecachePlayersFromList();
+        RecachePlayersFromBG();
+    }
+
+    if (GetFakeOnNextTick())
+    {
+        SetFakeOnNextTick(false);
+
+        SetByteValue(UNIT_FIELD_BYTES_0, 0, getFRace());
+        setFaction(getFFaction());
+        FakeDisplayID();
+
+        SetUInt32Value(PLAYER_BYTES, getFPlayerBytes());
+        SetUInt32Value(PLAYER_BYTES_2, getFPlayerBytes2());
+    }
 }

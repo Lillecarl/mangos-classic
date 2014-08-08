@@ -34,6 +34,7 @@
 #include "Formulas.h"
 #include "GridNotifiersImpl.h"
 #include "Chat.h"
+#include "CPlayer.h"
 
 namespace MaNGOS
 {
@@ -825,6 +826,8 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool Transport, bool Sen
 
     if (plr)
     {
+        plr->ToCPlayer()->LeaveBattleGround(this);
+
         // should remove spirit of redemption
         if (plr->HasAuraType(SPELL_AURA_SPIRIT_OF_REDEMPTION))
             plr->RemoveSpellsCausingAura(SPELL_AURA_MOD_SHAPESHIFT);
@@ -886,7 +889,7 @@ void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool Transport, bool Sen
         // Do next only if found in battleground
         plr->SetBattleGroundId(0, BATTLEGROUND_TYPE_NONE);  // We're not in BG.
         // reset destination bg team
-        plr->SetBGTeam(TEAM_NONE);
+        plr->SetTeam(TEAM_NONE);
 
         if (Transport)
             plr->TeleportToBGEntryPoint();
@@ -939,6 +942,8 @@ void BattleGround::StartBattleGround()
 
 void BattleGround::AddPlayer(Player* plr)
 {
+    plr->ToCPlayer()->JoinBattleGround(this);
+
     // remove afk from player
     if (plr->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_AFK))
         plr->ToggleAFK();
@@ -946,7 +951,7 @@ void BattleGround::AddPlayer(Player* plr)
     // score struct must be created in inherited class
 
     ObjectGuid guid = plr->GetObjectGuid();
-    Team team = plr->GetBGTeam();
+    Team team = plr->GetTeam();
 
     BattleGroundPlayer bp;
     bp.OfflineRemoveTime = 0;

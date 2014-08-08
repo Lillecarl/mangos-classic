@@ -42,6 +42,7 @@ set(SRC_GRP_CUSTOM
     CPlayer.h
     PvPReward.cpp
     CChat.cpp
+    CFBG.cpp
 )
 
 set(SRC_GRP_AHBOT

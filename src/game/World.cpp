@@ -837,6 +837,9 @@ void World::LoadConfigSettings(bool reload)
     std::string ignoreMapIds = sConfig.GetStringDefault("mmap.ignoreMapIds", "");
     MMAP::MMapFactory::preventPathfindingOnMaps(ignoreMapIds.c_str());
     sLog.outString("WORLD: mmap pathfinding %sabled", getConfig(CONFIG_BOOL_MMAP_ENABLED) ? "en" : "dis");
+
+    // CFBG
+    setConfig(CONFIG_BOOL_CFBG_ENABLED, "CrossBattlegrounds.Enabled", false);
 }
 
 /// Initialize the World

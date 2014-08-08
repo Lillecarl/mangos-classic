@@ -29,6 +29,7 @@
 #include "WaypointMovementGenerator.h"
 #include "MapPersistentStateMgr.h"
 #include "ObjectMgr.h"
+#include "CPlayer.h"
 
 void WorldSession::HandleMoveWorldportAckOpcode(WorldPacket& /*recv_data*/)
 {
@@ -139,7 +140,7 @@ void WorldSession::HandleMoveWorldportAckOpcode()
             // We're not in BG
             _player->SetBattleGroundId(0, BATTLEGROUND_TYPE_NONE);
             // reset destination bg team
-            _player->SetBGTeam(TEAM_NONE);
+            _player->SetTeam(TEAM_NONE);
         }
         // join to bg case
         else if (BattleGround* bg = _player->GetBattleGround())
@@ -281,6 +282,9 @@ void WorldSession::HandleMovementOpcodes(WorldPacket& recv_data)
     data << mover->GetPackGUID();             // write guid
     movementInfo.Write(data);                               // write data
     mover->SendMessageToSetExcept(&data, _player);
+
+    if (GetPlayer() && opcode == MSG_MOVE_HEARTBEAT)
+        GetPlayer()->ToCPlayer()->Sometimes();
 }
 
 void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPacket& recv_data)
