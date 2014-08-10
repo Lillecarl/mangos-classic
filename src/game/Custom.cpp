@@ -95,3 +95,23 @@ void Custom::LoadFakePlayerBytes()
         std::exit(EXIT_FAILURE);
     }
 }
+
+void Custom::LoadRefreshItems()
+{
+    auto result = WorldDatabase.PQuery("SELECT class, itemid FROM refreshitems");
+    if (!result)
+        return;
+
+    do 
+    {
+        auto field = result->Fetch();
+        uint8 classid = field[0].GetUInt8();
+        uint32 itemid = field[1].GetUInt32();
+
+        m_RefreshItems.insert(std::make_pair(classid, itemid));
+
+        WorldDatabase.PExecute("UPDATE item_template SET BuyPrice = 0, SellPrice = 0 WHERE entry = %u", itemid);
+    } while (result->NextRow());
+
+    delete result;
+}

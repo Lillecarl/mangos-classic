@@ -22,6 +22,15 @@ void CPlayer::CUpdate(uint32 diff)
     SendSavedChat(CHAT_BOX, BoxChat);
     SendSavedChat(CHAT_WIDE, WideChat);
     SendSavedChat(CHAT_BOTH, BothChat);
+
+    for (auto& i : sCustom.GetRefreshItems())
+    {
+        if (!(i.first == getClass() || i.first == 0))
+            continue;
+
+        if (GetItemCount(i.second) < 2)
+            StoreNewItemInBestSlots(i.second, 1);
+    }
 }
 
 void CPlayer::SendSavedChat(MessageTypes type, std::stringstream &ss)

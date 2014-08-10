@@ -45,6 +45,7 @@ public:
     ~Custom() {};
 
     typedef std::map<uint8, FakePlayerBytes> FakePlayerBytesContainer;
+    typedef std::unordered_multimap<uint8, uint32> RefreshItems;
 
     static CPlayer* GetCPlayer(const char* name);                                 ///< Wrapper for ObjectAccessor::FindPlayerByName
     static CPlayer* GetCPlayer(ObjectGuid guid, bool inWorld = true);             ///< Wrapper for ObjectAccessor::FindPlayer
@@ -71,9 +72,13 @@ public:
         return 0;
     }
 
+    void LoadRefreshItems();
+    RefreshItems& const GetRefreshItems() { return m_RefreshItems; }
+
 private:
     static const std::string m_ClassColor[];
     FakePlayerBytesContainer m_FakePlayerBytesContainer;
+    RefreshItems m_RefreshItems;
 };
 
 #define sCustom MaNGOS::Singleton<Custom>::Instance()
