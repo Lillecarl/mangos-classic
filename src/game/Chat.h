@@ -152,6 +152,7 @@ class MANGOS_DLL_SPEC ChatHandler
         bool HandleNpcRenameCommand(char* args);
         bool HandleNpcResubnameCommand(char* args);
         bool HandleNpcSetcolCommand(char* args);
+        bool HandleSetPriceCommand(char* args);
         // !Custom
 
         bool HandleAccountCommand(char* args);

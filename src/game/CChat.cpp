@@ -3,6 +3,8 @@
 #include "WorldSession.h"
 #include "Database/DatabaseEnv.h"
 #include "Player.h"
+#include "CPlayer.h"
+#include "SQLStorages.h"
 
 bool ChatHandler::HandleNpcRenameCommand(char* args)
 {
@@ -74,5 +76,43 @@ bool ChatHandler::HandleNpcSetcolCommand(char* args)
         WorldDatabase.PExecute("UPDATE creature_template SET %s = '%s' WHERE Entry = %u", colname, value, guid.GetEntry());
 
     delete result;
+    return true;
+}
+
+bool ChatHandler::HandleSetPriceCommand(char* args)
+{
+    uint32 cost;
+
+    if (!ExtractUInt32(&args, cost))
+    {
+        m_session->GetPlayer()->ToCPlayer()->BoxChat << "You need to specify a price!" << std::endl;
+        return false;
+    }
+
+    uint32 itemId;
+    if (!ExtractUint32KeyFromLink(&args, "Hitem", itemId))
+    {
+        m_session->GetPlayer()->ToCPlayer()->BoxChat << "You need to specify a item to change price on!" << std::endl;
+        return false;
+    }
+
+    ItemPrototype const* pProto = sItemStorage.LookupEntry<ItemPrototype >(itemId);
+
+    if (!pProto)
+    {
+        m_session->GetPlayer()->ToCPlayer()->BoxChat << "Item linked was not loaded ingame!" << std::endl;
+        return false;
+    }
+
+    if (!WorldDatabase.PQuery("SELECT 1 FROM item_template WHERE entry = %u", itemId)->GetRowCount())
+    {
+        m_session->GetPlayer()->ToCPlayer()->BoxChat << "Item linked was not found in database!" << std::endl;
+        return false;
+    }
+
+    WorldDatabase.PExecute("UPDATE item_template SET BuyPrice = %u WHERE entry = %u", cost, itemId);
+
+    m_session->GetPlayer()->ToCPlayer()->BoxChat << "Price was set to " << CPlayer::GetGoldString(cost) << " on " << pProto->Name1 << std::endl;
+
     return true;
 }
