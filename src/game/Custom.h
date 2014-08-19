@@ -73,7 +73,7 @@ public:
     }
 
     void LoadRefreshItems();
-    RefreshItems& const GetRefreshItems() { return m_RefreshItems; }
+    RefreshItems const& GetRefreshItems() { return m_RefreshItems; }
 
 private:
     static const std::string m_ClassColor[];
