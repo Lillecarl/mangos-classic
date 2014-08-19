@@ -29,6 +29,8 @@
 #define MSG_COLOR_WARLOCK      "|cff9482c9"
 #define MSG_COLOR_WARRIOR      "|cffc79c6e"
 
+#include <unordered_map>
+
 struct FakePlayerBytes
 {
     uint32 PlayerBytes[2];
