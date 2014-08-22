@@ -4659,10 +4659,6 @@ bool Unit::IsHostileTo(Unit const* unit) const
     if (unit == this)
         return false;
 
-    if (GetTypeId() == TYPEID_PLAYER && unit->GetTypeId() == TYPEID_PLAYER)
-    if (InSuperFriendlyAreaLikeMallEtc(GetAreaId()) || InSuperFriendlyAreaLikeMallEtc(unit->GetAreaId()))
-        return false;
-
     // always non-hostile to GM in GM mode
     if (unit->GetTypeId() == TYPEID_PLAYER && ((Player const*)unit)->isGameMaster())
         return false;
@@ -4703,6 +4699,10 @@ bool Unit::IsHostileTo(Unit const* unit) const
         // Duel
         if (pTester->IsInDuelWith(pTarget))
             return true;
+
+        if (GetTypeId() == TYPEID_PLAYER && unit->GetTypeId() == TYPEID_PLAYER)
+        if (InSuperFriendlyAreaLikeMallEtc(GetAreaId()) || InSuperFriendlyAreaLikeMallEtc(unit->GetAreaId()))
+            return false;
 
         // Group
         if (pTester->GetGroup() && pTester->GetGroup() == pTarget->GetGroup())
@@ -4775,10 +4775,6 @@ bool Unit::IsFriendlyTo(Unit const* unit) const
     if (unit == this)
         return true;
 
-    if (GetTypeId() == TYPEID_PLAYER && unit->GetTypeId() == TYPEID_PLAYER)
-    if (InSuperFriendlyAreaLikeMallEtc(GetAreaId()) || InSuperFriendlyAreaLikeMallEtc(unit->GetAreaId()))
-        return true;
-
     // always friendly to GM in GM mode
     if (unit->GetTypeId() == TYPEID_PLAYER && ((Player const*)unit)->isGameMaster())
         return true;
@@ -4819,6 +4815,10 @@ bool Unit::IsFriendlyTo(Unit const* unit) const
         // Duel
         if (pTester->IsInDuelWith(pTarget))
             return false;
+
+        if (GetTypeId() == TYPEID_PLAYER && unit->GetTypeId() == TYPEID_PLAYER)
+        if (InSuperFriendlyAreaLikeMallEtc(GetAreaId()) || InSuperFriendlyAreaLikeMallEtc(unit->GetAreaId()))
+            return true;
 
         // Group
         if (pTester->GetGroup() && pTester->GetGroup() == pTarget->GetGroup())
