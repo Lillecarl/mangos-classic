@@ -4645,10 +4645,22 @@ FactionTemplateEntry const* Unit::getFactionTemplateEntry() const
     return entry;
 }
 
+static bool InSuperFriendlyAreaLikeMallEtc(uint32 area)
+{
+    if (area == 2079)
+        return true;
+
+    return false;
+}
+
 bool Unit::IsHostileTo(Unit const* unit) const
 {
     // always non-hostile to self
     if (unit == this)
+        return false;
+
+    if (GetTypeId() == TYPEID_PLAYER && unit->GetTypeId() == TYPEID_PLAYER)
+    if (InSuperFriendlyAreaLikeMallEtc(GetAreaId()) || InSuperFriendlyAreaLikeMallEtc(unit->GetAreaId()))
         return false;
 
     // always non-hostile to GM in GM mode
@@ -4761,6 +4773,10 @@ bool Unit::IsFriendlyTo(Unit const* unit) const
 {
     // always friendly to self
     if (unit == this)
+        return true;
+
+    if (GetTypeId() == TYPEID_PLAYER && unit->GetTypeId() == TYPEID_PLAYER)
+    if (InSuperFriendlyAreaLikeMallEtc(GetAreaId()) || InSuperFriendlyAreaLikeMallEtc(unit->GetAreaId()))
         return true;
 
     // always friendly to GM in GM mode
