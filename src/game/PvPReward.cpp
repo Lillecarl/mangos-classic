@@ -85,7 +85,7 @@ void CPlayer::AddReward(std::string name, float amount)
         m_PendingReward = 0;
 
         SetMoney(GetMoney() + Reward);
-        BoxChat << "You were rewarded with " << GetGoldString(Reward) << " for the kills of " << GetRewardNames() << std::endl;
+        BoxChat << "You were rewarded with " << GetGoldString(Reward) << " for the kills of " << GetRewardNames(false) << std::endl;
         m_Rewards.clear();
     }
 }
