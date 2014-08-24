@@ -56,7 +56,7 @@ public:
 
     void LoadFakePlayerBytes();
 
-    uint8 PickFakeRace(uint8 pclass, Team team);
+    uint8 PickFakeRace(uint8 fallbackrace, uint8 pclass, Team team);
 
     uint32 GetFakePlayerBytes(uint8 race, uint8 gender)
     {

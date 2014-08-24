@@ -43,7 +43,7 @@ void CPlayer::SetFakeValues()
     m_oRace = GetByteValue(UNIT_FIELD_BYTES_0, 0);
     m_oFaction = GetUInt32Value(UNIT_FIELD_FACTIONTEMPLATE);
 
-    m_fRace = sCustom.PickFakeRace(getClass(), GetOTeam());
+    m_fRace = sCustom.PickFakeRace(getORace(), getClass(), GetOTeam());
     m_fFaction = Player::getFactionForRace(m_fRace);
 
     m_oPlayerBytes = GetUInt32Value(PLAYER_BYTES);

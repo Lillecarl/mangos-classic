@@ -38,7 +38,7 @@ CPlayer* Custom::GetCPlayer(ObjectGuid guid, bool inWorld /*=true*/)
     return static_cast<CPlayer*>(plr);
 }
 
-uint8 Custom::PickFakeRace(uint8 pclass, Team team)
+uint8 Custom::PickFakeRace(uint8 fallbackrace, uint8 pclass, Team team)
 {
     std::vector<uint8> playableRaces;
 
@@ -56,6 +56,9 @@ uint8 Custom::PickFakeRace(uint8 pclass, Team team)
 
         playableRaces.push_back(i);
     }
+
+    if (playableRaces.empty())
+        return fallbackrace;
 
     return playableRaces[urand(0, playableRaces.size() - 1)];
 }
