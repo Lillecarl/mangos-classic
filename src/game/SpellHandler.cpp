@@ -143,7 +143,7 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
     }
 
     // Note: If script stop casting it must send appropriate data to client to prevent stuck item in gray state.
-    if (!sScriptMgr.OnItemUse(pUser, pItem, targets))
+    if (!sCPlusMgr.OnItemUse(pUser, pItem, targets))
     {
         // no script or script not process request by self
         pUser->CastItemUseSpell(pItem, targets);

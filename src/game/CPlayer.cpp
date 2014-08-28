@@ -15,6 +15,7 @@ CPlayer::CPlayer(WorldSession* session) : Player(session)
     m_fPlayerBytes2 = 0;
     m_Recache = 0;
     m_FakeOnNextTick = 0;
+    m_ScriptID = 0;
 }
 
 void CPlayer::CUpdate(uint32 diff)

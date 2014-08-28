@@ -53,7 +53,7 @@ void WorldSession::HandleQuestgiverStatusQueryOpcode(WorldPacket& recv_data)
 
             if (!cr_questgiver->IsHostileTo(_player))       // not show quest status to enemies
             {
-                dialogStatus = sScriptMgr.GetDialogStatus(_player, cr_questgiver);
+                dialogStatus = sCPlusMgr.GetDialogStatus(_player, cr_questgiver);
 
                 if (dialogStatus == DIALOG_STATUS_UNDEFINED)
                     dialogStatus = getDialogStatus(_player, cr_questgiver, DIALOG_STATUS_NONE);
@@ -63,7 +63,7 @@ void WorldSession::HandleQuestgiverStatusQueryOpcode(WorldPacket& recv_data)
         case TYPEID_GAMEOBJECT:
         {
             GameObject* go_questgiver = (GameObject*)questgiver;
-            dialogStatus = sScriptMgr.GetDialogStatus(_player, go_questgiver);
+            dialogStatus = sCPlusMgr.GetDialogStatus(_player, go_questgiver);
 
             if (dialogStatus == DIALOG_STATUS_UNDEFINED)
                 dialogStatus = getDialogStatus(_player, go_questgiver, DIALOG_STATUS_NONE);
@@ -100,7 +100,7 @@ void WorldSession::HandleQuestgiverHelloOpcode(WorldPacket& recv_data)
     // Stop the npc if moving
     pCreature->StopMoving();
 
-    if (sScriptMgr.OnGossipHello(_player, pCreature))
+    if (sCPlusMgr.OnGossipHello(_player, pCreature))
         return;
 
     _player->PrepareGossipMenu(pCreature, pCreature->GetCreatureInfo()->GossipMenuId);
@@ -612,7 +612,7 @@ void WorldSession::HandleQuestgiverStatusMultipleQuery(WorldPacket& /*recvPacket
             if (!questgiver->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER))
                 continue;
 
-            dialogStatus = sScriptMgr.GetDialogStatus(_player, questgiver);
+            dialogStatus = sCPlusMgr.GetDialogStatus(_player, questgiver);
 
             if (dialogStatus == DIALOG_STATUS_UNDEFINED)
                 dialogStatus = getDialogStatus(_player, questgiver, DIALOG_STATUS_NONE);
@@ -631,7 +631,7 @@ void WorldSession::HandleQuestgiverStatusMultipleQuery(WorldPacket& /*recvPacket
             if (questgiver->GetGoType() != GAMEOBJECT_TYPE_QUESTGIVER)
                 continue;
 
-            dialogStatus = sScriptMgr.GetDialogStatus(_player, questgiver);
+            dialogStatus = sCPlusMgr.GetDialogStatus(_player, questgiver);
 
             if (dialogStatus == DIALOG_STATUS_UNDEFINED)
                 dialogStatus = getDialogStatus(_player, questgiver, DIALOG_STATUS_NONE);

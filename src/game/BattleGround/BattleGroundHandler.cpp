@@ -542,7 +542,7 @@ void WorldSession::HandleAreaSpiritHealerQueueOpcode(WorldPacket& recv_data)
     if (!unit->isSpiritService())                           // it's not spirit service
         return;
 
-    sScriptMgr.OnGossipHello(GetPlayer(), unit);
+    sCPlusMgr.OnGossipHello(GetPlayer(), unit);
 }
 
 void WorldSession::SendBattleGroundJoinError(uint8 err)

@@ -106,7 +106,12 @@ public:
     std::string GetNameLink(bool applycolors = false);
 
     uint32 GetAVGILevel(bool levelasmin = false);
+
+    void SetScriptID(uint32 id) { m_ScriptID = id; }
+    uint32 GetScriptID() { return m_ScriptID; }
+
 private:
+    uint32 m_ScriptID;
 };
 
 #endif

@@ -1031,23 +1031,6 @@ bool ChatHandler::HandleLoadScriptsCommand(char* args)
     if (!*args)
         return false;
 
-    switch (sScriptMgr.LoadScriptLibrary(args))
-    {
-        case SCRIPT_LOAD_OK:
-            sWorld.SendWorldText(LANG_SCRIPTS_RELOADED_ANNOUNCE);
-            SendSysMessage(LANG_SCRIPTS_RELOADED_OK);
-            break;
-        case SCRIPT_LOAD_ERR_NOT_FOUND:
-            SendSysMessage(LANG_SCRIPTS_NOT_FOUND);
-            break;
-        case SCRIPT_LOAD_ERR_WRONG_API:
-            SendSysMessage(LANG_SCRIPTS_WRONG_API);
-            break;
-        case SCRIPT_LOAD_ERR_OUTDATED:
-            SendSysMessage(LANG_SCRIPTS_OUTDATED);
-            break;
-    }
-
     return true;
 }
 

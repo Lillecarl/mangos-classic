@@ -496,6 +496,9 @@
     <ClCompile Include="..\..\src\game\CFBG.cpp">
       <Filter>Custom</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\game\CPlusMgr.cpp">
+      <Filter>Custom</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\game\AccountMgr.h">
@@ -938,6 +941,9 @@
       <Filter>Custom</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\game\Custom.h">
+      <Filter>Custom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\game\CPlusMgr.h">
       <Filter>Custom</Filter>
     </ClInclude>
   </ItemGroup>

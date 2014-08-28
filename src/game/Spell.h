@@ -354,7 +354,7 @@ class Spell
         bool CheckTarget(Unit* target, SpellEffectIndex eff);
         bool CanAutoCast(Unit* target);
 
-        static void MANGOS_DLL_SPEC SendCastResult(Player* caster, SpellEntry const* spellInfo, SpellCastResult result);
+        static void SendCastResult(Player* caster, SpellEntry const* spellInfo, SpellCastResult result);
         void SendCastResult(SpellCastResult result);
         void SendSpellStart();
         void SendSpellGo();
@@ -599,7 +599,7 @@ enum ReplenishType
 
 namespace MaNGOS
 {
-    struct MANGOS_DLL_DECL SpellNotifierPlayer              // Currently unused. When put to use this one requires handling for source-location (smilar to below)
+    struct SpellNotifierPlayer              // Currently unused. When put to use this one requires handling for source-location (smilar to below)
     {
         Spell::UnitList& i_data;
         Spell& i_spell;
@@ -634,7 +634,7 @@ namespace MaNGOS
         template<class SKIP> void Visit(GridRefManager<SKIP>&) {}
     };
 
-    struct MANGOS_DLL_DECL SpellNotifierCreatureAndPlayer
+    struct SpellNotifierCreatureAndPlayer
     {
         Spell::UnitList* i_data;
         Spell& i_spell;
