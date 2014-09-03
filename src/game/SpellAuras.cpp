@@ -411,10 +411,7 @@ void Aura::Update(uint32 diff)
             float chance = float(100 * pow((m_SecondsPassed - WhenStart), 2) / pow(15.f - float(WhenStart), 2)) + res + Talent;
 
             if (frand(0.f, 100.f) < chance)
-            {
                 GetTarget()->RemoveSpellAuraHolder(GetHolder());
-                ((Player*)GetTarget())->ToCPlayer()->BoxChat << "Res: " << res << " Talent: " << Talent << " chance: " << chance << " SecondsPassed: " << m_SecondsPassed << std::endl;
-            }
         }
     }
 
