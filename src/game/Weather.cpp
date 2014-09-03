@@ -222,6 +222,9 @@ bool Weather::UpdateWeather()
     if (!player)
         return false;
 
+    m_type = WEATHER_TYPE_FINE;
+    m_grade = 0;
+
     ///- Send the weather packet to all players in this zone
     uint32 sound = GetSound();
 
