@@ -63,6 +63,7 @@
 #include "AuctionHouseBot/AuctionHouseBot.h"
 #include "CharacterDatabaseCleaner.h"
 #include "CreatureLinkingMgr.h"
+#include "Custom.h"
 
 INSTANTIATE_SINGLETON_1(World);
 
@@ -1219,6 +1220,8 @@ void World::SetInitialWorldSettings()
 
     sLog.outString("Initializing Scripts...");
     sCPlusMgr.LoadScripts();
+    sCustom.LoadRefreshItems();
+    // sCustom.LoadFakePlayerBytes();
 
     ///- Initialize game time and timers
     sLog.outString("DEBUG:: Initialize game time and timers");
