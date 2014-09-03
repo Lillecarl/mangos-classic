@@ -383,7 +383,7 @@
       <Version>
       </Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\..\dep\lib\$(Platform)_debug;.\framework__$(Platform)_$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\dep\lib\$(Platform)_debug;.\framework__$(Platform)_$(Configuration);.\VC120\scripts__$(Platform)_$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(TargetDir)$(TargetName).pdb</ProgramDatabaseFile>
       <MapFileName>$(TargetDir)$(TargetName).map</MapFileName>
@@ -494,6 +494,9 @@
     </ProjectReference>
     <ProjectReference Include="realmd.vcxproj">
       <Project>{563e9905-3657-460c-ae63-0ac39d162e23}</Project>
+    </ProjectReference>
+    <ProjectReference Include="scripts.vcxproj">
+      <Project>{46307b9b-2252-44d5-a632-c407ea63edf7}</Project>
     </ProjectReference>
     <ProjectReference Include="shared.vcxproj">
       <Project>{90297c34-f231-4df4-848e-a74bcc0e40ed}</Project>
