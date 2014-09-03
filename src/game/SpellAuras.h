@@ -489,6 +489,8 @@ class Aura
         SpellAuraHolder* const m_spellAuraHolder;
     private:
         void ReapplyAffectedPassiveAuras(Unit* target);
+        uint8 m_SecondsPassed = 0;
+        uint32 m_SecondTimer = 0;
 };
 
 class AreaAura : public Aura

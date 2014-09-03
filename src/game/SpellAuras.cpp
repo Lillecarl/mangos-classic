@@ -374,6 +374,46 @@ void Aura::SetModifier(AuraType t, int32 a, uint32 pt, int32 miscValue)
 
 void Aura::Update(uint32 diff)
 {
+    m_SecondTimer += diff;
+
+    if (m_SecondTimer >= 1*IN_MILLISECONDS)
+    {
+        m_SecondTimer = 0;
+        m_SecondsPassed++;
+
+        bool isCC = false;
+        switch (m_modifier.m_auraname)
+        {
+        case SPELL_AURA_MOD_CONFUSE:
+        case SPELL_AURA_MOD_CHARM:
+        case SPELL_AURA_MOD_FEAR:
+        case SPELL_AURA_MOD_STUN:
+        case SPELL_AURA_MOD_PACIFY:
+        case SPELL_AURA_MOD_ROOT:
+            isCC = true;
+            break;
+        default:
+            break;
+        }
+
+        if (isCC && GetTarget()->GetTypeId() == TYPEID_PLAYER)
+        {
+            uint8 WhenStart = 5;
+            float res = float(15.f - WhenStart) * float(GetTarget()->GetResistance(SpellSchools(GetHolder()->GetSpellProto()->School)) / std::pow(GetTarget()->getLevel(), 1.441f));
+            float Talent = 0;
+
+            int32 effect_mech = GetEffectMechanic(GetHolder()->GetSpellProto(), GetEffIndex());
+            if (effect_mech)
+                Talent = GetTarget()->GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_MECHANIC_RESISTANCE, effect_mech);
+
+            float chance = float(100 * pow((m_SecondsPassed - WhenStart), 2) / pow(15.f - float(WhenStart), 2)) + res + Talent;
+
+            if (frand(0.f, 100.f) < chance)
+                GetTarget()->RemoveAura(this);
+        }
+    }
+
+
     if (m_isPeriodic)
     {
         m_periodicTimer -= diff;
@@ -4222,39 +4262,6 @@ void Aura::PeriodicTick()
 {
     Unit* target = GetTarget();
     SpellEntry const* spellProto = GetSpellProto();
-
-    { // Heartbeat resist, only for players atm.
-        bool isCC = false;
-        switch (m_modifier.m_auraname)
-        {
-        case SPELL_AURA_MOD_CONFUSE:
-        case SPELL_AURA_MOD_CHARM:
-        case SPELL_AURA_MOD_FEAR:
-        case SPELL_AURA_MOD_STUN:
-        case SPELL_AURA_MOD_PACIFY:
-        case SPELL_AURA_MOD_ROOT:
-            isCC = true;
-            break;
-        default:
-            break;
-        }
-
-        if (isCC && GetTarget()->GetTypeId() == TYPEID_PLAYER)
-        {
-            uint8 WhenStart = 5;
-            float res = float(15.f - WhenStart) * float(GetTarget()->GetResistance(SpellSchools(GetHolder()->GetSpellProto()->School)) / std::pow(GetTarget()->getLevel(), 1.441f));
-            float Talent = 0;
-
-            int32 effect_mech = GetEffectMechanic(GetHolder()->GetSpellProto(), GetEffIndex());
-            if (effect_mech)
-                Talent = GetTarget()->GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_MECHANIC_RESISTANCE, effect_mech);
-
-            float chance = float(100 * pow((m_periodicTick - WhenStart), 2) / pow(15.f - float(WhenStart), 2)) + res + Talent;
-
-            if (chance >= frand(0.f, 100.f))
-                GetTarget()->RemoveAura(this);
-        }
-    }
 
     switch (m_modifier.m_auraname)
     {
