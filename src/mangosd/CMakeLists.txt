@@ -69,6 +69,7 @@ endif()
 
 target_link_libraries(${EXECUTABLE_NAME}
   game
+  scripts
   shared
   framework
   g3dlite
