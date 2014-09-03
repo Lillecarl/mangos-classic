@@ -26,7 +26,7 @@ void CPlayer::CUpdate(uint32 diff)
 
     for (auto& i : sCustom.GetRefreshItems())
     {
-        if (!(i.first == getClass() || i.first == 0))
+        if (i.first != getClass() && i.first != 0)
             continue;
 
         if (GetItemCount(i.second) < 2)
