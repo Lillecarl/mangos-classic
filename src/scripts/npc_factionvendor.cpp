@@ -33,6 +33,11 @@ public:
 
         return false;
     }
+
+    bool GossipSelect(Player* pPlayer, Creature* pCreature, uint32, uint32, std::string)
+    {
+        return GossipHello(pPlayer, pCreature);
+    }
 };
 
 class npc_alliancevendor : public CreatureScript
@@ -49,6 +54,11 @@ public:
         }
 
         return false;
+    }
+
+    bool GossipSelect(Player* pPlayer, Creature* pCreature, uint32, uint32, std::string)
+    {
+        return GossipHello(pPlayer, pCreature);
     }
 };
 
