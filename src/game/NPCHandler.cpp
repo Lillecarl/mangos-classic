@@ -382,7 +382,7 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket& recv_data)
             return;
         }
 
-        if (!sCPlusMgr.OnGossipSelect(_player, pCreature, sender, action, code.empty() ? NULL : code.c_str()))
+        if (!sCPlusMgr.OnGossipSelect(_player, pCreature, sender, action, code.empty() ? "" : code))
             _player->OnGossipSelect(pCreature, gossipListId);
     }
     else if (guid.IsGameObject())
@@ -395,7 +395,7 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket& recv_data)
             return;
         }
 
-        if (!sCPlusMgr.OnGossipSelect(_player, pGo, sender, action, code.empty() ? NULL : code.c_str()))
+        if (!sCPlusMgr.OnGossipSelect(_player, pGo, sender, action, code.empty() ? "" : code))
             _player->OnGossipSelect(pGo, gossipListId);
     }
 }
