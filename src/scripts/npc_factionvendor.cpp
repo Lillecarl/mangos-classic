@@ -25,7 +25,13 @@ public:
 
     bool GossipHello(Player* pPlayer, Creature* pCreature)
     {
-        return (pPlayer->GetOTeam() == ALLIANCE);
+        if (pPlayer->GetOTeam() != HORDE)
+        {
+            pPlayer->PlayerTalkClass->SendGossipMenu("You are not horde, you may not buy shite from me!", pCreature->GetObjectGuid());
+            return true;
+        }
+
+        return false;
     }
 };
 
@@ -36,7 +42,13 @@ public:
 
     bool GossipHello(Player* pPlayer, Creature* pCreature)
     {
-        return (pPlayer->GetOTeam() == HORDE);
+        if (pPlayer->GetOTeam() != ALLIANCE)
+        {
+            pPlayer->PlayerTalkClass->SendGossipMenu("You are not alliance, you may not buy shite from me!", pCreature->GetObjectGuid());
+            return true;
+        }
+
+        return false;
     }
 };
 
