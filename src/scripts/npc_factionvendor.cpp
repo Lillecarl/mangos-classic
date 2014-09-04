@@ -26,17 +26,19 @@ public:
     bool GossipHello(Player* pPlayer, Creature* pCreature)
     {
         if (pPlayer->GetOTeam() != HORDE)
-        {
             pPlayer->PlayerTalkClass->SendGossipMenu("You are not horde, you may not buy shite from me!", pCreature->GetObjectGuid());
-            return true;
-        }
+        else
+            pPlayer->GetSession()->SendListInventory(pCreature->GetGUID());
 
-        return false;
+        return true;
     }
 
     bool GossipSelect(Player* pPlayer, Creature* pCreature, uint32, uint32, std::string)
     {
-        return GossipHello(pPlayer, pCreature);
+        if (pPlayer->GetOTeam() == HORDE)
+            pPlayer->GetSession()->SendListInventory(pCreature->GetGUID());
+
+        return true;
     }
 };
 
@@ -48,17 +50,19 @@ public:
     bool GossipHello(Player* pPlayer, Creature* pCreature)
     {
         if (pPlayer->GetOTeam() != ALLIANCE)
-        {
             pPlayer->PlayerTalkClass->SendGossipMenu("You are not alliance, you may not buy shite from me!", pCreature->GetObjectGuid());
-            return true;
-        }
+        else
+            pPlayer->GetSession()->SendListInventory(pCreature->GetGUID());
 
-        return false;
+        return true;
     }
 
     bool GossipSelect(Player* pPlayer, Creature* pCreature, uint32, uint32, std::string)
     {
-        return GossipHello(pPlayer, pCreature);
+        if (pPlayer->GetOTeam() == HORDE)
+            pPlayer->GetSession()->SendListInventory(pCreature->GetGUID());
+
+        return true;
     }
 };
 
