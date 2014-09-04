@@ -31,7 +31,7 @@ public:
     void DamageTaken(Unit* pDealer, uint32& uiDamage)
     {
         if (pDealer->GetTypeId() == TYPEID_PLAYER)
-            m_AttackerMap[pDealer->GetObjectGuid()] = 5000;
+            m_AttackerMap[pDealer->GetObjectGuid()] = 6000;
 
         m_creature->SetHealth(m_creature->GetMaxHealth() * 0.2f);
         //m_creature->SetTargetGuid(m_creature->GetObjectGuid());
