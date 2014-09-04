@@ -1,5 +1,6 @@
 #include "CPlayer.h"
 #include "Custom.h"
+#include "GossipDef.h"
 
 CPlayer::CPlayer(WorldSession* session) : Player(session)
 {
@@ -125,4 +126,30 @@ void CPlayer::Sometimes()
         SetUInt32Value(PLAYER_BYTES, getFPlayerBytes());
         SetUInt32Value(PLAYER_BYTES_2, getFPlayerBytes2());
     }
+}
+
+void PlayerMenu::SendGossipMenu(std::string text, ObjectGuid objectGuid, uint32 scriptid, uint32 textid)
+{
+    WorldPacket data(SMSG_NPC_TEXT_UPDATE, 100);            // guess size
+    data << textid;                                         // can be < 0
+
+    for (auto i = 0; i < 8; ++i)
+    {
+        data << float(0);
+        data << text.c_str();
+        data << text.c_str();
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+    }
+
+    GetMenuSession()->GetPlayer()->ToCPlayer()->SetScriptID(scriptid);
+
+    GetMenuSession()->SendPacket(&data);
+
+    SendGossipMenu(textid, objectGuid);
 }

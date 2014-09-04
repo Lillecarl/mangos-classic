@@ -3,6 +3,7 @@
 
 #include "Player.h"
 #include "ObjectGuid.h"
+#include "GossipDef.h"
 
 enum MessageTypes
 {
@@ -109,6 +110,11 @@ public:
 
     void SetScriptID(uint32 id) { m_ScriptID = id; }
     uint32 GetScriptID() { return m_ScriptID; }
+
+    void AddGossipMenuItem(Icon::Icon icon, std::string message, uint32 sender, uint32 action)
+    {
+        PlayerTalkClass->GetGossipMenu().AddMenuItem(icon, message.c_str(), sender, action, "", 0);
+    }
 
 private:
     uint32 m_ScriptID;

@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\scripts\npc_teleporter.cpp" />
     <ClCompile Include="..\..\src\scripts\npc_training_dummy.cpp" />
     <ClCompile Include="..\..\src\scripts\Precompiled.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

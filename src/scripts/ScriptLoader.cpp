@@ -19,8 +19,10 @@
 #include "Precompiled.h"
 
 void AddSC_npc_training_dummy();
+void AddSC_npc_training_dummy();
 
 void AddScripts()
 {
+    AddSC_npc_training_dummy();
     AddSC_npc_training_dummy();
 }

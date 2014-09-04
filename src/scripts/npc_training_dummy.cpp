@@ -17,8 +17,6 @@
 */
 
 #include "Precompiled.h"
-#include "CreatureAI.h"
-#include "CPlusMgr.h"
 
 class npc_training_dummyAI : public CreatureAI
 {

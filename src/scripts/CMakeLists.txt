@@ -27,6 +27,7 @@ set(LIBRARY_SRCS
     ScriptLoader.cpp
     
     npc_training_dummy.cpp
+    npc_teleporter.cpp
 )
 
 add_library(${LIBRARY_NAME} STATIC

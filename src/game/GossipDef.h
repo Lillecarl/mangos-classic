@@ -29,6 +29,23 @@ class WorldSession;
 #define GOSSIP_MAX_MENU_ITEMS       32                      // client supports showing max 32 items
 #define DEFAULT_GOSSIP_MESSAGE      0xffffff
 
+namespace Icon
+{
+    enum Icon
+    {
+        CHAT = 0,  // white chat bubble
+        BAG = 1,  // brown bag
+        TAXI = 2,  // flight
+        TRAINER = 3,  // book
+        GEAR = 4,  // interaction wheel
+        MONEY_BAG = 6,  // brown bag with coin
+        CHAT_DOTS = 7,  // white chat bubble with black dots
+        TABARD = 8,  // tabard
+        SWORDS = 9,  // two swords
+        // DOT       = 10, // yellow dot ----->BROKEN<-----
+    };
+}
+
 enum Gossip_Option
 {
     GOSSIP_OPTION_NONE              = 0,                    // UNIT_NPC_FLAG_NONE                (0)
@@ -264,6 +281,7 @@ class PlayerMenu
         bool GossipOptionCoded(unsigned int Selection);
 
         void SendGossipMenu(uint32 titleTextId, ObjectGuid objectGuid);
+        void SendGossipMenu(std::string text, ObjectGuid objectGuid, uint32 scriptid = 0, uint32 textid = 2147483647);
         void CloseGossip();
         void SendPointOfInterest(float X, float Y, uint32 Icon, uint32 Flags, uint32 Data, const char* locName);
         void SendPointOfInterest(uint32 poi_id);
