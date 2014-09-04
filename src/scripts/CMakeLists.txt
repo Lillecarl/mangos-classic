@@ -28,6 +28,7 @@ set(LIBRARY_SRCS
     
     npc_training_dummy.cpp
     npc_teleporter.cpp
+    npc_factionvendor.cpp
 )
 
 add_library(${LIBRARY_NAME} STATIC

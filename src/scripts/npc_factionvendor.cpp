@@ -18,13 +18,30 @@
 
 #include "Precompiled.h"
 
-void AddSC_npc_training_dummy();
-void AddSC_npc_training_dummy();
-void AddSC_factionvendors();
-
-void AddScripts()
+class npc_hordevendor : public CreatureScript
 {
-    AddSC_npc_training_dummy();
-    AddSC_npc_training_dummy();
-    AddSC_factionvendors();
+public:
+    npc_hordevendor() : CreatureScript("npc_hordevendor") {}
+
+    bool GossipHello(Player* pPlayer, Creature* pCreature)
+    {
+        return (pPlayer->GetOTeam() == ALLIANCE);
+    }
+};
+
+class npc_alliancevendor : public CreatureScript
+{
+public:
+    npc_alliancevendor() : CreatureScript("npc_alliancevendor") {}
+
+    bool GossipHello(Player* pPlayer, Creature* pCreature)
+    {
+        return (pPlayer->GetOTeam() == HORDE);
+    }
+};
+
+void AddSC_factionvendors()
+{
+    new npc_hordevendor;
+    new npc_alliancevendor;
 }

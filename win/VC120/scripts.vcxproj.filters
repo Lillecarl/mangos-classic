@@ -17,5 +17,6 @@
     <ClCompile Include="..\..\src\scripts\ScriptLoader.cpp" />
     <ClCompile Include="..\..\src\scripts\npc_training_dummy.cpp" />
     <ClCompile Include="..\..\src\scripts\npc_teleporter.cpp" />
+    <ClCompile Include="..\..\src\scripts\npc_factionvendor.cpp" />
   </ItemGroup>
 </Project>
