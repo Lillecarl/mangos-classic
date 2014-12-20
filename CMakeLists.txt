@@ -98,6 +98,12 @@ endif()
 
 add_definitions("-std=c++11")
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+message(STATUS "GCC: Enabled c++11 support")
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99")
+message(STATUS "GCC: Enabled C99 support")
+
 # find Git: used to get the revision number
 find_package(Git)
 
