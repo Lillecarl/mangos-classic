@@ -19,12 +19,12 @@
 #include "Precompiled.h"
 
 void AddSC_npc_training_dummy();
-void AddSC_npc_training_dummy();
 void AddSC_factionvendors();
+void AddSC_npc_teleporter();
 
 void AddScripts()
 {
     AddSC_npc_training_dummy();
-    AddSC_npc_training_dummy();
     AddSC_factionvendors();
+    AddSC_npc_teleporter();
 }
