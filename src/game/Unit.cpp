@@ -647,7 +647,7 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     {
         DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamage %s Killed %s", GetGuidStr().c_str(), pVictim->GetGuidStr().c_str());
 
-        if (attacker && victim)
+        if (attacker && victim && pVictim->GetTypeId() == TYPEID_PLAYER)
             victim->ToCPlayer()->HandlePvPKill();
 
         /*

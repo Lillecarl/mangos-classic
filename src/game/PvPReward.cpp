@@ -21,6 +21,8 @@
 
 void CPlayer::HandlePvPKill()
 {
+
+
     // Damage
     float TotalDMG = 0;
     for (auto& i : GetDamagers())
