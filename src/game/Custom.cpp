@@ -38,6 +38,37 @@ CPlayer* Custom::GetCPlayer(ObjectGuid guid, bool inWorld /*=true*/)
     return static_cast<CPlayer*>(plr);
 }
 
+Custom::SpellContainer Custom::GetSpellContainerByCreatureEntry(uint32 entry)
+{
+    SpellContainer spellContainer;
+
+    if (TrainerSpellData const* spelldata = sObjectMgr.GetNpcTrainerSpells(entry))
+        for (auto& itr : spelldata->spellList)
+            spellContainer.push_back(itr.second);
+
+    const CreatureInfo* creature = sObjectMgr.GetCreatureTemplate(entry);
+
+    if (!creature)
+        return spellContainer;
+
+    uint32 trainertemplate = creature->TrainerTemplateId;
+
+    if (trainertemplate)
+        if (TrainerSpellData const* spelldata2 = sObjectMgr.GetNpcTrainerTemplateSpells(trainertemplate))
+            for (auto& itr : spelldata2->spellList)
+                spellContainer.push_back(itr.second);
+
+    return spellContainer;
+}
+
+Custom::SpellContainer* Custom::GetCachedSpellContainer(uint32 crval)
+{
+    if (m_CachedSpellContainer.find(crval) != m_CachedSpellContainer.cend())
+        return m_CachedSpellContainer[crval];
+
+    return NULL;
+}
+
 uint8 Custom::PickFakeRace(uint8 fallbackrace, uint8 pclass, Team team)
 {
     std::vector<uint8> playableRaces;

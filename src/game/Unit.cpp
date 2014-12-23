@@ -7665,6 +7665,9 @@ void Unit::SetLevel(uint32 lvl)
     // group update
     if ((GetTypeId() == TYPEID_PLAYER) && ((Player*)this)->GetGroup())
         ((Player*)this)->SetGroupUpdateFlag(GROUP_UPDATE_FLAG_LEVEL);
+
+    if (GetTypeId() == TYPEID_PLAYER) // Learn new spells for level
+        ((Player*)this)->ToCPlayer()->FillGreenSpellList();
 }
 
 void Unit::SetHealth(uint32 val)

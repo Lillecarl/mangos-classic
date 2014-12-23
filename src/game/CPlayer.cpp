@@ -21,6 +21,8 @@ CPlayer::CPlayer(WorldSession* session) : Player(session)
 
 void CPlayer::CUpdate(uint32 diff)
 {
+    LearnGreenSpells();
+
     SendSavedChat(CHAT_BOX, BoxChat);
     SendSavedChat(CHAT_WIDE, WideChat);
     SendSavedChat(CHAT_BOTH, BothChat);
@@ -32,6 +34,95 @@ void CPlayer::CUpdate(uint32 diff)
 
         if (GetItemCount(i.second) < 2)
             StoreNewItemInBestSlots(i.second, 1);
+    }
+}
+
+void CPlayer::LearnGreenSpells()
+{
+    if (m_DelayedSpellLearn.empty())
+        return;
+
+    uint32 spellid = m_DelayedSpellLearn.front();
+
+    learnSpell(spellid, false);
+
+    m_DelayedSpellLearn.erase(m_DelayedSpellLearn.begin());
+
+    if (m_DelayedSpellLearn.empty())
+        FillGreenSpellList();
+}
+
+void CPlayer::FillGreenSpellList()
+{
+    uint32 trainerid = 0;
+
+    switch (getClass())
+    {
+    case CLASS_WARRIOR: trainerid = 4595;  break;
+    case CLASS_PALADIN: trainerid = 5491;  break;
+    case CLASS_HUNTER:  trainerid = 10930;  break;
+    case CLASS_ROGUE:   trainerid = 3401;  break;
+    case CLASS_PRIEST:  trainerid = 4606;  break;
+    case CLASS_SHAMAN:  trainerid = 986;  break;
+    case CLASS_MAGE:    trainerid = 7312;  break;
+    case CLASS_WARLOCK: trainerid = 5612;  break;
+    case CLASS_DRUID:   trainerid = 8142;  break;
+    default:
+        break;
+    }
+
+    if (!trainerid)
+        return;
+
+    Custom::SpellContainer* allSpellContainer = sCustom.GetCachedSpellContainer(getClass());
+
+    if (!allSpellContainer)
+    {
+        allSpellContainer = new Custom::SpellContainer;
+
+        Custom::SpellContainer classSpellContainer = sCustom.GetSpellContainerByCreatureEntry(trainerid);
+
+        for (auto& itr : classSpellContainer)
+            allSpellContainer->push_back(itr);
+
+        sCustom.CacheSpellContainer(getClass(), allSpellContainer);
+    }
+
+    if (allSpellContainer->empty())
+        return;
+
+    m_DelayedSpellLearn.clear();
+
+    for (auto itr = allSpellContainer->cbegin(); itr != allSpellContainer->cend(); ++itr)
+    {
+        TrainerSpell const* tSpell = &*itr;
+
+        TrainerSpellState state = GetTrainerSpellState(tSpell, tSpell->reqLevel);
+
+        if (state == TRAINER_SPELL_GREEN)
+        {
+            if (IsInWorld())
+            {
+                bool CastLearned = false;
+
+                if (SpellEntry const* spellInfo = sSpellStore.LookupEntry(tSpell->spell))
+                {
+                    for (auto i = 0; i < MAX_EFFECT_INDEX; ++i)
+                    {
+                        if (spellInfo->Effect[i] == SPELL_EFFECT_LEARN_SPELL)
+                        {
+                            CastLearned = true;
+
+                            if (!HasSpell(spellInfo->EffectTriggerSpell[i]))
+                                m_DelayedSpellLearn.push_back(spellInfo->EffectTriggerSpell[i]);
+                        }
+                    }
+                }
+
+                if (!CastLearned)
+                    m_DelayedSpellLearn.push_back(tSpell->spell);
+            }
+        }
     }
 }
 

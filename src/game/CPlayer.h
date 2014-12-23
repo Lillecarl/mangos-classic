@@ -96,6 +96,8 @@ private:
     /*************************************Misc*******************************/
     /************************************************************************/
 public:
+    typedef std::vector<uint32> DelayedSpellLearn;
+
     std::stringstream BoxChat;
     std::stringstream WideChat;
     std::stringstream BothChat;
@@ -116,8 +118,14 @@ public:
         PlayerTalkClass->GetGossipMenu().AddMenuItem(icon, message.c_str(), sender, action, "", 0);
     }
 
+    void LearnGreenSpells();
+    void FillGreenSpellList();
+
 private:
     uint32 m_ScriptID;
+
+
+    DelayedSpellLearn m_DelayedSpellLearn;
 };
 
 #endif
