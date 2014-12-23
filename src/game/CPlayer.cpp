@@ -1,6 +1,7 @@
 #include "CPlayer.h"
 #include "Custom.h"
 #include "GossipDef.h"
+#include "Spell.h"
 
 CPlayer::CPlayer(WorldSession* session) : Player(session)
 {
@@ -107,14 +108,22 @@ void CPlayer::FillGreenSpellList()
 
                 if (SpellEntry const* spellInfo = sSpellStore.LookupEntry(tSpell->spell))
                 {
-                    for (auto i = 0; i < MAX_EFFECT_INDEX; ++i)
+                    if (spellInfo->Effect[EFFECT_INDEX_0] == SPELL_EFFECT_LEARN_SPELL)
                     {
-                        if (spellInfo->Effect[i] == SPELL_EFFECT_LEARN_SPELL)
-                        {
-                            CastLearned = true;
+                        CastLearned = true;
 
-                            if (!HasSpell(spellInfo->EffectTriggerSpell[i]))
-                                m_DelayedSpellLearn.push_back(spellInfo->EffectTriggerSpell[i]);
+                        if (!HasSpell(spellInfo->EffectTriggerSpell[EFFECT_INDEX_0]))
+                        {
+                            Spell* spell;
+                            if (spellInfo->SpellVisual == 222)
+                                spell = new Spell(this, spellInfo, false);
+                            else
+                                spell = new Spell(this, spellInfo, false);
+
+                            SpellCastTargets targets;
+                            targets.setUnitTarget(this);
+
+                            spell->prepare(&targets);
                         }
                     }
                 }
