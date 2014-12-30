@@ -310,7 +310,7 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket& recv_data)
         data << pProto->Quality;
         data << pProto->Flags;
         data << pProto->BuyPrice;
-        data << pProto->SellPrice;
+        data << uint32(1);
         data << pProto->InventoryType;
         data << pProto->AllowableClass;
         data << pProto->AllowableRace;
@@ -563,7 +563,7 @@ void WorldSession::HandleSellItemOpcode(WorldPacket& recv_data)
 
                 uint32 money = pProto->SellPrice * count;
 
-                _player->ModifyMoney(money);
+                // _player->ModifyMoney(money);
             }
             else
                 _player->SendSellError(SELL_ERR_CANT_SELL_ITEM, pCreature, itemGuid, 0);
