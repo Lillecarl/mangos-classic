@@ -68,7 +68,7 @@ public:
             else if (action == 2)
                 TeleportPlayerToTeleName(pCPlayer, "tele_guru");
             else if (action == 3)
-                pCPlayer->SendTalentWipeConfirm(pCPlayer->GetObjectGuid());
+                pCPlayer->SendTalentWipeConfirm(pCreature->GetObjectGuid());
             else if (action == 4)
                 pCPlayer->SendPetSkillWipeConfirm();
         }
