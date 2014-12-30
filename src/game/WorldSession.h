@@ -561,7 +561,7 @@ class WorldSession
         void HandleQuestPushResult(WorldPacket& recvPacket);
 
         bool processChatmessageFurtherAfterSecurityChecks(std::string&, uint32);
-        void SendPlayerNotFoundNotice(std::string name);
+        void SendPlayerNotFoundNotice(const std::string &name);
         void SendWrongFactionNotice();
         void SendChatRestrictedNotice();
         void HandleMessagechatOpcode(WorldPacket& recvPacket);
