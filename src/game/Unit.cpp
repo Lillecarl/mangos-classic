@@ -624,6 +624,39 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
         if (attacker && victim && pVictim->GetTypeId() == TYPEID_PLAYER)
             victim->ToCPlayer()->HandlePvPKill();
 
+
+        if (GetAreaId() == 2177 || GetAreaId() == 1741 && victim->ToCPlayer())
+        {
+            // Gurubashi arena kill
+
+            SetHealth(GetMaxHealth());
+            SetPower(POWER_MANA, GetMaxPower(POWER_MANA));
+            SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY));
+
+            if (Pet* pPet = GetPet())
+            {
+                SetHealth(GetMaxHealth());
+                SetPower(POWER_MANA, GetMaxPower(POWER_MANA));
+                SetPower(POWER_FOCUS, GetMaxPower(POWER_FOCUS));
+            }
+
+            // gurubashiloc_
+
+            std::vector<std::string> TeleNames;
+
+            for (auto& i : sObjectMgr.GetGameTeleMap())
+                if (i.second.name.find("gurubashiloc_") != std::string::npos)
+                    TeleNames.push_back(i.second.name);
+
+            if (!TeleNames.empty())
+                if (auto pTele = sObjectMgr.GetGameTele(TeleNames[urand(0, TeleNames.size() - 1)]))
+                    victim->TeleportTo(pTele->mapId, pTele->position_x, pTele->position_y, pTele->position_z, pTele->orientation);
+
+            return damage;
+
+            // Kinda worth testing this at least... xD Not nice at all but i am lazy.
+        }
+
         /*
          *                      Preparation: Who gets credit for killing whom, invoke SpiritOfRedemtion?
          */
