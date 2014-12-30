@@ -44,6 +44,11 @@ public:
         if (pCPlayer->GetAreaId() != 1741 && pCPlayer->GetAreaId() != 2177)
             pCPlayer->AddGossipMenuItem(Icon::TAXI, "Teleport to Gurubashi Arena", 0, 2);
 
+        pCPlayer->AddGossipMenuItem(Icon::GEAR, "Reset talents", 0, 3);
+
+        if (pCPlayer->getClass() == CLASS_HUNTER)
+        pCPlayer->AddGossipMenuItem(Icon::GEAR, "Reset pet skills", 0, 4);
+
         if (!pPlayer->PlayerTalkClass->GetGossipMenu().Empty())
             pPlayer->PlayerTalkClass->SendGossipMenu("Your wish, my law!", pCreature->GetObjectGuid());
         return true;
@@ -52,6 +57,7 @@ public:
     bool GossipSelect(Player* pPlayer, Creature* pCreature, uint32 sender, uint32 action, std::string code)
     {
         CPlayer* pCPlayer = pPlayer->ToCPlayer();
+        pCPlayer->PlayerTalkClass->CloseGossip();
 
         if (sender == 0)
         {
@@ -61,6 +67,10 @@ public:
                 TeleportPlayerToTeleName(pCPlayer, "tele_mall");
             else if (action == 2)
                 TeleportPlayerToTeleName(pCPlayer, "tele_guru");
+            else if (action == 3)
+                pCPlayer->SendTalentWipeConfirm(pCPlayer->GetObjectGuid());
+            else if (action == 4)
+                pCPlayer->SendPetSkillWipeConfirm();
         }
 
 
