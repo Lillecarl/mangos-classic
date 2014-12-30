@@ -70,7 +70,10 @@ void CPlayer::LearnGreenSpells()
     m_DelayedSpellLearn.erase(m_DelayedSpellLearn.begin());
 
     if (m_DelayedSpellLearn.empty())
+    {
         FillGreenSpellList();
+        UpdateSkillsToMaxSkillsForLevel();
+    }
 }
 
 void CPlayer::FillGreenSpellList()
