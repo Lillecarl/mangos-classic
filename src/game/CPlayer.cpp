@@ -63,7 +63,7 @@ void CPlayer::FillGreenSpellList()
     case CLASS_PALADIN: trainerid = 5491;  break;
     case CLASS_HUNTER:  trainerid = 10930;  break;
     case CLASS_ROGUE:   trainerid = 3401;  break;
-    case CLASS_PRIEST:  trainerid = 4606;  break;
+    case CLASS_PRIEST:  trainerid = 376;  break;
     case CLASS_SHAMAN:  trainerid = 986;  break;
     case CLASS_MAGE:    trainerid = 7312;  break;
     case CLASS_WARLOCK: trainerid = 5612;  break;
