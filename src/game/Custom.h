@@ -30,6 +30,7 @@
 #define MSG_COLOR_WARRIOR      "|cffc79c6e"
 
 #include <unordered_map>
+#include "Creature.h"
 
 struct FakePlayerBytes
 {
