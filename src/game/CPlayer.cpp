@@ -45,7 +45,27 @@ void CPlayer::LearnGreenSpells()
 
     uint32 spellid = m_DelayedSpellLearn.front();
 
-    learnSpell(spellid, false);
+    if (SpellEntry const* spellInfo = sSpellStore.LookupEntry(spellid))
+    {
+        if (spellInfo->Effect[EFFECT_INDEX_0] == SPELL_EFFECT_LEARN_SPELL)
+        {
+            if (!HasSpell(spellInfo->EffectTriggerSpell[EFFECT_INDEX_0]))
+            {
+                Spell* spell;
+                if (spellInfo->SpellVisual == 222)
+                    spell = new Spell(this, spellInfo, false);
+                else
+                    spell = new Spell(this, spellInfo, false);
+
+                SpellCastTargets targets;
+                targets.setUnitTarget(this);
+
+                spell->prepare(&targets);
+            }
+        }
+        else
+            learnSpell(spellid, false);
+    }
 
     m_DelayedSpellLearn.erase(m_DelayedSpellLearn.begin());
 
@@ -61,10 +81,10 @@ void CPlayer::FillGreenSpellList()
     {
     case CLASS_WARRIOR: trainerid = 4595;  break;
     case CLASS_PALADIN: trainerid = 5491;  break;
-    case CLASS_HUNTER:  trainerid = 10930;  break;
+    case CLASS_HUNTER:  trainerid = 10930; break;
     case CLASS_ROGUE:   trainerid = 3401;  break;
-    case CLASS_PRIEST:  trainerid = 376;  break;
-    case CLASS_SHAMAN:  trainerid = 986;  break;
+    case CLASS_PRIEST:  trainerid = 376;   break;
+    case CLASS_SHAMAN:  trainerid = 986;   break;
     case CLASS_MAGE:    trainerid = 7312;  break;
     case CLASS_WARLOCK: trainerid = 5612;  break;
     case CLASS_DRUID:   trainerid = 8142;  break;
@@ -103,34 +123,7 @@ void CPlayer::FillGreenSpellList()
         if (state == TRAINER_SPELL_GREEN)
         {
             if (IsInWorld())
-            {
-                bool CastLearned = false;
-
-                if (SpellEntry const* spellInfo = sSpellStore.LookupEntry(tSpell->spell))
-                {
-                    if (spellInfo->Effect[EFFECT_INDEX_0] == SPELL_EFFECT_LEARN_SPELL)
-                    {
-                        CastLearned = true;
-
-                        if (!HasSpell(spellInfo->EffectTriggerSpell[EFFECT_INDEX_0]))
-                        {
-                            Spell* spell;
-                            if (spellInfo->SpellVisual == 222)
-                                spell = new Spell(this, spellInfo, false);
-                            else
-                                spell = new Spell(this, spellInfo, false);
-
-                            SpellCastTargets targets;
-                            targets.setUnitTarget(this);
-
-                            spell->prepare(&targets);
-                        }
-                    }
-                }
-
-                if (!CastLearned)
-                    m_DelayedSpellLearn.push_back(tSpell->spell);
-            }
+                m_DelayedSpellLearn.push_back(tSpell->spell);
         }
     }
 }
