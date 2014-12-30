@@ -7397,7 +7397,7 @@ void Player::SendTalentWipeConfirm(ObjectGuid guid)
 {
     WorldPacket data(MSG_TALENT_WIPE_CONFIRM, (8 + 4));
     data << ObjectGuid(guid);
-    data << uint32(resetTalentsCost());
+    data << uint32(0);
     GetSession()->SendPacket(&data);
 }
 
