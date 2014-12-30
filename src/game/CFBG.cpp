@@ -245,8 +245,8 @@ bool BattleGroundQueue::CheckMixedMatch(BattleGround* bg_template, BattleGroundB
         return false;
 
     // Empty selection pool, we do not want old data.
-    m_SelectionPools[BG_TEAM_ALLIANCE].Init();
-    m_SelectionPools[BG_TEAM_HORDE].Init();
+    m_SelectionPools[TEAM_INDEX_ALLIANCE].Init();
+    m_SelectionPools[TEAM_INDEX_HORDE].Init();
 
     uint32 addedally = 0;
     uint32 addedhorde = 0;
@@ -288,7 +288,7 @@ bool BattleGroundQueue::CheckMixedMatch(BattleGround* bg_template, BattleGroundB
             if (Player* pPlayer = sObjectMgr.GetPlayer(jtr.first))
                 GroupIlevel += pPlayer->ToCPlayer()->GetAVGILevel(true);
 
-            if (m_SelectionPools[ginfo->GroupTeam == ALLIANCE ? BG_TEAM_ALLIANCE : BG_TEAM_HORDE].AddGroup(ginfo, maxPlayers))
+            if (m_SelectionPools[ginfo->GroupTeam == ALLIANCE ? TEAM_INDEX_ALLIANCE : TEAM_INDEX_HORDE].AddGroup(ginfo, maxPlayers))
             {
                 ginfo->GroupTeam == ALLIANCE ? ilevelally += GroupIlevel : ilevelhorde += GroupIlevel;
                 ginfo->GroupTeam == ALLIANCE ? addedally += GroupIlevel : addedhorde += GroupIlevel;
@@ -296,15 +296,15 @@ bool BattleGroundQueue::CheckMixedMatch(BattleGround* bg_template, BattleGroundB
             else
                 break;
 
-            if (m_SelectionPools[BG_TEAM_ALLIANCE].GetPlayerCount() >= minPlayers &&
-                m_SelectionPools[BG_TEAM_HORDE].GetPlayerCount() >= minPlayers)
+            if (m_SelectionPools[TEAM_INDEX_ALLIANCE].GetPlayerCount() >= minPlayers &&
+                m_SelectionPools[TEAM_INDEX_HORDE].GetPlayerCount() >= minPlayers)
                 return true;
         }
     }
 
     if (sBattleGroundMgr.isTesting() &&
-        (m_SelectionPools[BG_TEAM_ALLIANCE].GetPlayerCount() ||
-        m_SelectionPools[BG_TEAM_HORDE].GetPlayerCount()))
+        (m_SelectionPools[TEAM_INDEX_ALLIANCE].GetPlayerCount() ||
+        m_SelectionPools[TEAM_INDEX_HORDE].GetPlayerCount()))
         return true;
 
     return false;
@@ -335,7 +335,7 @@ bool BattleGroundQueue::MixPlayersToBG(BattleGround* bg, BattleGroundBracketId b
 
             ginfo->GroupTeam = makeally ? ALLIANCE : HORDE;
 
-            if (m_SelectionPools[makeally ? BG_TEAM_ALLIANCE : BG_TEAM_HORDE].AddGroup(ginfo, makeally ? allyFree : hordeFree))
+            if (m_SelectionPools[makeally ? TEAM_INDEX_ALLIANCE : TEAM_INDEX_HORDE].AddGroup(ginfo, makeally ? allyFree : hordeFree))
                 makeally ? addedally += ginfo->Players.size() : addedhorde += ginfo->Players.size();
             else
                 break;

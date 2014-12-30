@@ -230,7 +230,7 @@ GroupQueueInfo* BattleGroundQueue::AddGroup(Player* leader, Group* grp, BattleGr
 void BattleGroundQueue::PlayerInvitedToBGUpdateAverageWaitTime(GroupQueueInfo* ginfo, BattleGroundBracketId bracket_id)
 {
     uint32 timeInQueue = WorldTimer::getMSTimeDiff(ginfo->JoinTime, WorldTimer::getMSTime());
-    uint8 team_index = TEAM_INDEX_ALLIANCE;                    // default set to BG_TEAM_ALLIANCE - or non rated arenas!
+    uint8 team_index = TEAM_INDEX_ALLIANCE;                    // default set to TEAM_INDEX_ALLIANCE - or non rated arenas!
 
     if (ginfo->GroupTeam == HORDE)
         team_index = TEAM_INDEX_HORDE;
@@ -250,7 +250,7 @@ void BattleGroundQueue::PlayerInvitedToBGUpdateAverageWaitTime(GroupQueueInfo* g
 
 uint32 BattleGroundQueue::GetAverageQueueWaitTime(GroupQueueInfo* ginfo, BattleGroundBracketId bracket_id)
 {
-    uint8 team_index = TEAM_INDEX_ALLIANCE;                    // default set to BG_TEAM_ALLIANCE - or non rated arenas!
+    uint8 team_index = TEAM_INDEX_ALLIANCE;                    // default set to TEAM_INDEX_ALLIANCE - or non rated arenas!
     if (ginfo->GroupTeam == HORDE)
         team_index = TEAM_INDEX_HORDE;
     // check if there is enought values(we always add values > 0)
