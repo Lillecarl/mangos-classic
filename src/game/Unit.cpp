@@ -4655,7 +4655,7 @@ bool Unit::IsHostileTo(Unit const* unit) const
         if (pTester->IsInDuelWith(pTarget))
             return true;
 
-        if (GetTypeId() == TYPEID_PLAYER && unit->GetTypeId() == TYPEID_PLAYER)
+        if (GetCharmerOrOwnerPlayerOrPlayerItself() && unit->GetCharmerOrOwnerPlayerOrPlayerItself())
         if (InSuperFriendlyAreaLikeMallEtc(GetAreaId()) || InSuperFriendlyAreaLikeMallEtc(unit->GetAreaId()))
             return false;
 
@@ -4771,7 +4771,7 @@ bool Unit::IsFriendlyTo(Unit const* unit) const
         if (pTester->IsInDuelWith(pTarget))
             return false;
 
-        if (GetTypeId() == TYPEID_PLAYER && unit->GetTypeId() == TYPEID_PLAYER)
+        if (GetCharmerOrOwnerPlayerOrPlayerItself() && unit->GetCharmerOrOwnerPlayerOrPlayerItself())
         if (InSuperFriendlyAreaLikeMallEtc(GetAreaId()) || InSuperFriendlyAreaLikeMallEtc(unit->GetAreaId()))
             return true;
 
