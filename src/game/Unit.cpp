@@ -7387,6 +7387,19 @@ void Unit::ApplyDiminishingToDuration(DiminishingGroup group, int32& duration, U
     if (duration == -1 || group == DIMINISHING_NONE || (!isReflected && caster->IsFriendlyTo(this)))
         return;
 
+    if (duration > 10 * IN_MILLISECONDS && IsDiminishingReturnsGroupDurationLimited(group))
+    {
+        // test pet/charm masters instead pets/charmeds
+        Unit const* targetOwner = GetCharmerOrOwner();
+        Unit const* casterOwner = caster->GetCharmerOrOwner();
+
+        Unit const* target = targetOwner ? targetOwner : this;
+        Unit const* source = casterOwner ? casterOwner : caster;
+
+        if (target->GetTypeId() == TYPEID_PLAYER && source->GetTypeId() == TYPEID_PLAYER)
+            duration = 10000;
+    }
+
     float mod = 1.0f;
 
     // Some diminishings applies to mobs too (for example, Stun)
