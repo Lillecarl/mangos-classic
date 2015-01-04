@@ -1128,11 +1128,19 @@ void Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask, bool isReflected)
 
         if (!realCaster->IsFriendlyTo(unit))
         {
-            // for delayed spells ignore not visible explicit target
-            if (speed > 0.0f && unit == m_targets.getUnitTarget() &&
-                    !unit->isVisibleForOrDetect(m_caster, m_caster, false))
+            // Check if target is visible.
+            bool Visible = true;
+            if ((unit->HasAuraType(SPELL_AURA_MOD_INVISIBILITY) ||
+                unit->HasAuraType(SPELL_AURA_MOD_STEALTH) ||
+                unit->HasAura(20580) /* Shadowmeld */) &&
+                !unit->isVisibleForOrDetect(m_caster, m_caster, true)){
+                Visible = false;
+            }
+
+            if (m_spellInfo->speed > 0.0f && unit == m_targets.getUnitTarget() && !Visible)
             {
-                realCaster->SendSpellMiss(unit, m_spellInfo->Id, SPELL_MISS_EVADE);
+                // We can't send SPELL_MISS_EVADE because it will cause combat-log error
+                realCaster->SendSpellMiss(unit, m_spellInfo->Id, SPELL_MISS_MISS);
                 ResetEffectDamageAndHeal();
                 return;
             }

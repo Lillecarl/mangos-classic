@@ -1008,6 +1008,8 @@ class Unit : public WorldObject
 
         virtual ~Unit();
 
+        void InterruptCasters();
+
         void AddToWorld() override;
         void RemoveFromWorld() override;
 

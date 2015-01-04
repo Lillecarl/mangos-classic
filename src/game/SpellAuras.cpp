@@ -2305,6 +2305,9 @@ void Aura::HandleFeignDeath(bool apply, bool Real)
     if (!Real)
         return;
 
+    // Interrupt cast if FD.
+    GetTarget()->InterruptCasters();
+
     GetTarget()->SetFeignDeath(apply, GetCasterGuid(), GetId());
 }
 
@@ -2437,9 +2440,13 @@ void Aura::HandleAuraModStun(bool apply, bool Real)
 void Aura::HandleModStealth(bool apply, bool Real)
 {
     Unit* target = GetTarget();
+    Unit* caster = GetCaster();
 
     if (apply)
     {
+        // Interrupt cast if Stealth.
+        target->InterruptCasters();
+
         // drop flag at stealth in bg
         target->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION);
 

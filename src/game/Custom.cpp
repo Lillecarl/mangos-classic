@@ -4,6 +4,8 @@
 #include "ObjectAccessor.h"
 #include "ObjectMgr.h"
 #include "World.h"
+#include "GridNotifiers.h"
+#include "Spell.h"
 
 const std::string Custom::m_ClassColor[] =
 {
@@ -148,4 +150,25 @@ void Custom::LoadRefreshItems()
     } while (result->NextRow());
 
     delete result;
+}
+
+void Unit::InterruptCasters()
+{
+    Unit *target = this;
+    // there is also a spell wich has TARGET_RANDOM_ENEMY_CHAIN_IN_AREA but it's unused. So not really necessary.
+    std::list<Unit*> targets;
+    MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck u_check(target, GetMap()->GetVisibilityDistance());
+    MaNGOS::UnitListSearcher<MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck> searcher(targets, u_check);
+    Cell::VisitAllObjects(target, searcher, GetMap()->GetVisibilityDistance());
+    for (std::list<Unit*>::iterator iter = targets.begin(); iter != targets.end(); ++iter){
+
+        if (!(*iter)->IsNonMeleeSpellCasted(false))
+            continue;
+
+        for (uint32 i = CURRENT_FIRST_NON_MELEE_SPELL; i < CURRENT_MAX_SPELL; i++){
+            if ((*iter)->GetCurrentSpell(CurrentSpellTypes(i)) &&
+                (*iter)->GetCurrentSpell(CurrentSpellTypes(i))->m_targets.getUnitTargetGuid() == target->GetObjectGuid())
+                (*iter)->InterruptSpell(CurrentSpellTypes(CurrentSpellTypes(i)), false);
+        }
+    }
 }
