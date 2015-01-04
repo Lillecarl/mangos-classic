@@ -548,8 +548,8 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
     {
         pCurrChar->setCinematic(1);
 
-        if (ChrRacesEntry const* rEntry = sChrRacesStore.LookupEntry(pCurrChar->getRace()))
-            pCurrChar->SendCinematicStart(rEntry->CinematicSequence);
+        /*if (ChrRacesEntry const* rEntry = sChrRacesStore.LookupEntry(pCurrChar->getRace()))
+            pCurrChar->SendCinematicStart(rEntry->CinematicSequence);*/
     }
 
     uint32 miscRequirement = 0;

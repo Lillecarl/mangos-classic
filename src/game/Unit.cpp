@@ -652,6 +652,9 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
                 if (auto pTele = sObjectMgr.GetGameTele(TeleNames[urand(0, TeleNames.size() - 1)]))
                     victim->TeleportTo(pTele->mapId, pTele->position_x, pTele->position_y, pTele->position_z, pTele->orientation);
 
+
+            // Remove all negative auras
+
             for (SpellAuraHolderMap::iterator iter = m_spellAuraHolders.begin(); iter != m_spellAuraHolders.end();)
             {
                 if (!iter->second->IsPositive())
@@ -664,8 +667,6 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             }
 
             return damage;
-
-            // Kinda worth testing this at least... xD Not nice at all but i am lazy.
         }
 
         /*
