@@ -814,6 +814,28 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
                     else
                         ++iter;
                 }
+
+                if (SpellEntry const* spellInfo = sSpellStore.LookupEntry(642))
+                {
+                    SpellAuraHolder* holder = CreateSpellAuraHolder(spellInfo, victim, victim);
+
+                    for (uint32 i = 0; i < MAX_EFFECT_INDEX; ++i)
+                    {
+                        uint8 eff = spellInfo->Effect[i];
+                        if (eff >= TOTAL_SPELL_EFFECTS)
+                            continue;
+                        if (IsAreaAuraEffect(eff) ||
+                            eff == SPELL_EFFECT_APPLY_AURA ||
+                            eff == SPELL_EFFECT_PERSISTENT_AREA_AURA)
+                        {
+                            Aura* aur = CreateAura(spellInfo, SpellEffectIndex(i), NULL, holder, victim);
+                            holder->AddAura(aur, SpellEffectIndex(i));
+                        }
+                    }
+                    holder->SetAuraDuration(3);
+
+                    victim->AddSpellAuraHolder(holder);
+                }
             }
         }
         else                                                // Killed creature

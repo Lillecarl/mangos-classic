@@ -1133,7 +1133,8 @@ void Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask, bool isReflected)
             if ((unit->HasAuraType(SPELL_AURA_MOD_INVISIBILITY) ||
                 unit->HasAuraType(SPELL_AURA_MOD_STEALTH) ||
                 unit->HasAura(20580) /* Shadowmeld */) &&
-                !unit->isVisibleForOrDetect(m_caster, m_caster, true)){
+                !unit->isVisibleForOrDetect(m_caster, m_caster, true))
+            {
                 Visible = false;
             }
 
