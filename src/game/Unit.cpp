@@ -809,7 +809,7 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
                     if (!iter->second->IsPositive())
                     {
                         victim->RemoveSpellAuraHolder(iter->second, AURA_REMOVE_BY_DEATH);
-                        iter = m_spellAuraHolders.begin();
+                        iter = victim->m_spellAuraHolders.begin();
                     }
                     else
                         ++iter;
