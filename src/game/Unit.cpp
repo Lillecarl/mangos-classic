@@ -533,6 +533,11 @@ void Unit::DealDamageMods(Unit* pVictim, uint32& damage, uint32* absorb)
 
 uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDamage, DamageEffectType damagetype, SpellSchoolMask damageSchoolMask, SpellEntry const* spellProto, bool durabilityLoss)
 {
+    Player* attacker = GetCharmerOrOwnerPlayerOrPlayerItself();
+    Player* victim = pVictim->GetCharmerOrOwnerPlayerOrPlayerItself();
+
+    bool GuruKill = GetAreaId() == 2177 || GetAreaId() == 1741 && victim->ToCPlayer();
+
     // remove affects from attacker at any non-DoT damage (including 0 damage)
     if (damagetype != DOT)
     {
@@ -557,9 +562,6 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
 
     uint32 health = pVictim->GetHealth();
     DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "deal dmg:%d to health:%d ", damage, health);
-
-    Player* attacker = GetCharmerOrOwnerPlayerOrPlayerItself();
-    Player* victim = pVictim->GetCharmerOrOwnerPlayerOrPlayerItself();
 
     if (attacker && victim && damage && attacker != victim)
     {
@@ -623,51 +625,6 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
 
         if (attacker && victim && pVictim->GetTypeId() == TYPEID_PLAYER)
             victim->ToCPlayer()->HandlePvPKill();
-
-
-        if (GetAreaId() == 2177 || GetAreaId() == 1741 && victim->ToCPlayer())
-        {
-            // Gurubashi arena kill
-
-            SetHealth(GetMaxHealth());
-            SetPower(POWER_MANA, GetMaxPower(POWER_MANA));
-            SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY));
-
-            if (Pet* pPet = GetPet())
-            {
-                SetHealth(GetMaxHealth());
-                SetPower(POWER_MANA, GetMaxPower(POWER_MANA));
-                SetPower(POWER_FOCUS, GetMaxPower(POWER_FOCUS));
-            }
-
-            // gurubashiloc_
-
-            std::vector<std::string> TeleNames;
-
-            for (auto& i : sObjectMgr.GetGameTeleMap())
-                if (i.second.name.find("gurubashiloc_") != std::string::npos)
-                    TeleNames.push_back(i.second.name);
-
-            if (!TeleNames.empty())
-                if (auto pTele = sObjectMgr.GetGameTele(TeleNames[urand(0, TeleNames.size() - 1)]))
-                    victim->TeleportTo(pTele->mapId, pTele->position_x, pTele->position_y, pTele->position_z, pTele->orientation);
-
-
-            // Remove all negative auras
-
-            for (SpellAuraHolderMap::iterator iter = m_spellAuraHolders.begin(); iter != m_spellAuraHolders.end();)
-            {
-                if (!iter->second->IsPositive())
-                {
-                    RemoveSpellAuraHolder(iter->second, AURA_REMOVE_BY_DEATH);
-                    iter = m_spellAuraHolders.begin();
-                }
-                else
-                    ++iter;
-            }
-
-            return damage;
-        }
 
         /*
          *                      Preparation: Who gets credit for killing whom, invoke SpiritOfRedemtion?
@@ -744,7 +701,7 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
         /*
          *                      Actions for the killer
          */
-        if (spiritOfRedemtionTalentReady)
+        if (spiritOfRedemtionTalentReady && !GuruKill)
         {
             DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamage: Spirit of Redemtion ready");
 
@@ -786,7 +743,7 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
 
             // 10% durability loss on death
             // only if not player and not controlled by player pet. And not at BG
-            if (durabilityLoss && !player_tap && !playerVictim->InBattleGround())
+            if (durabilityLoss && !player_tap && !playerVictim->InBattleGround() && !GuruKill)
             {
                 DEBUG_LOG("DealDamage: Killed %s, looing 10 percents durability", pVictim->GetGuidStr().c_str());
                 playerVictim->DurabilityLossAll(0.10f, false);
@@ -795,7 +752,7 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
                 playerVictim->GetSession()->SendPacket(&data);
             }
 
-            if (!spiritOfRedemtionTalentReady)              // Before informing Battleground
+            if (!spiritOfRedemtionTalentReady && !GuruKill)              // Before informing Battleground
             {
                 DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "SET JUST_DIED");
                 pVictim->SetDeathState(JUST_DIED);
@@ -822,6 +779,40 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
                     // selfkills are not handled in outdoor pvp scripts
                     if (OutdoorPvP* outdoorPvP = sOutdoorPvPMgr.GetScript(playerVictim->GetCachedZoneId()))
                         outdoorPvP->HandlePlayerKill(player_tap, playerVictim);
+                }
+            }
+
+
+            if (GuruKill)
+            {
+                // Gurubashi arena kill
+
+                victim->ResurrectPlayer(1.f, false);
+
+                // gurubashiloc_
+
+                std::vector<std::string> TeleNames;
+
+                for (auto& i : sObjectMgr.GetGameTeleMap())
+                    if (i.second.name.find("gurubashiloc_") != std::string::npos)
+                        TeleNames.push_back(i.second.name);
+
+                if (!TeleNames.empty())
+                    if (auto pTele = sObjectMgr.GetGameTele(TeleNames[urand(0, TeleNames.size() - 1)]))
+                        victim->TeleportTo(pTele->mapId, pTele->position_x, pTele->position_y, pTele->position_z, pTele->orientation);
+
+
+                // Remove all negative auras
+
+                for (SpellAuraHolderMap::iterator iter = victim->m_spellAuraHolders.begin(); iter != victim->m_spellAuraHolders.end();)
+                {
+                    if (!iter->second->IsPositive())
+                    {
+                        victim->RemoveSpellAuraHolder(iter->second, AURA_REMOVE_BY_DEATH);
+                        iter = m_spellAuraHolders.begin();
+                    }
+                    else
+                        ++iter;
                 }
             }
         }

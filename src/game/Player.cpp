@@ -4027,6 +4027,13 @@ void Player::ResurrectPlayer(float restore_percent, bool applySickness)
         SetPower(POWER_MANA, uint32(GetMaxPower(POWER_MANA)*restore_percent));
         SetPower(POWER_RAGE, 0);
         SetPower(POWER_ENERGY, uint32(GetMaxPower(POWER_ENERGY)*restore_percent));
+
+        if (Pet* pPet = GetPet())
+        {
+            SetHealth(uint32(GetMaxHealth()));
+            SetPower(POWER_MANA, uint32(GetMaxPower(POWER_MANA)*restore_percent));
+            SetPower(POWER_FOCUS, uint32(GetMaxPower(POWER_FOCUS)*restore_percent));
+        }
     }
 
     // trigger update zone for alive state zone updates
