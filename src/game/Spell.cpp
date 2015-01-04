@@ -991,6 +991,13 @@ void Spell::DoAllEffectOnTarget(TargetInfo* target)
                     // stored in unused spell effect basepoints in main spell code
                     uint32 spellid = m_currentBasePoints[EFFECT_INDEX_1];
                     spellInfo = sSpellStore.LookupEntry(spellid);
+
+                    m_healing = caster->SpellHealingBonusDone(unitTarget, spellInfo, m_healing, HEAL);
+                    m_healing = unitTarget->SpellHealingBonusTaken(caster, spellInfo, m_healing, HEAL);
+                    addhealth = m_healing;
+
+                    if (crit)
+                        addhealth = caster->SpellCriticalHealingBonus(spellInfo, addhealth, NULL);
                 }
             }
 
