@@ -43,6 +43,9 @@ public:
             pCPlayer->AddGossipMenuItem(Icon::TAXI, "Teleport to Mall", 0, 1);
         if (pCPlayer->GetAreaId() != 1741 && pCPlayer->GetAreaId() != 2177)
             pCPlayer->AddGossipMenuItem(Icon::TAXI, "Teleport to Gurubashi Arena", 0, 2);
+		if (pCPlayer->GetAreaId() != 190)
+			pCPlayer->AddGossipMenuItem(Icon::TAXI, "Teleport to Gurubashi Arena", 0, 5);
+
 
         pCPlayer->AddGossipMenuItem(Icon::GEAR, "Reset talents", 0, 3);
 
@@ -71,6 +74,8 @@ public:
                 pCPlayer->SendTalentWipeConfirm(pCreature->GetObjectGuid());
             else if (action == 4)
                 pCPlayer->SendPetSkillWipeConfirm();
+			else if (action == 5)
+				TeleportPlayerToTeleName(pCPlayer, "tele_hearth");
         }
 
 
