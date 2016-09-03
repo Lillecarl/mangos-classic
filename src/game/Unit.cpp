@@ -400,7 +400,7 @@ bool Unit::UpdateMeleeAttackingState()
         player->SwingErrorMsg(swingError);
     }
 
-    return swingError == 0;
+    return swingError;
 }
 
 bool Unit::haveOffhandWeapon() const
@@ -2383,19 +2383,7 @@ uint32 Unit::CalculateDamage(WeaponAttackType attType, bool normalized, uint8 in
 
 float Unit::CalculateLevelPenalty(SpellEntry const* spellProto) const
 {
-    uint32 spellLevel = spellProto->spellLevel;
-    if (spellLevel <= 0)
-        return 1.0f;
-
-    float LvlPenalty = 0.0f;
-
-    if (spellLevel < 20)
-        LvlPenalty = 20.0f - spellLevel * 3.75f;
-    float LvlFactor = (float(spellLevel) + 6.0f) / float(getLevel());
-    if (LvlFactor > 1.0f)
-        LvlFactor = 1.0f;
-
-    return (100.0f - LvlPenalty) * LvlFactor / 100.0f;
+    return spellProto->spellLevel < 20 && spellProto->spellLevel > 0 ? (1.0f - ((20.0f - spellProto->spellLevel) * 0.0375f)) : 1.0f;
 }
 
 void Unit::SendMeleeAttackStart(Unit* pVictim)
@@ -5012,10 +5000,13 @@ bool Unit::Attack(Unit* victim, bool meleeAttack)
         if (m_attacking == victim)
         {
             // switch to melee attack from ranged/magic
-            if (meleeAttack && !hasUnitState(UNIT_STAT_MELEE_ATTACKING))
+            if (meleeAttack)
             {
-                addUnitState(UNIT_STAT_MELEE_ATTACKING);
-                SendMeleeAttackStart(victim);
+                if (!hasUnitState(UNIT_STAT_MELEE_ATTACKING))
+                {
+                    addUnitState(UNIT_STAT_MELEE_ATTACKING);
+                    SendMeleeAttackStart(victim);
+                }
                 return true;
             }
             return false;
@@ -5074,37 +5065,25 @@ void Unit::AttackedBy(Unit* attacker)
 
 void Unit::AttackStop(bool targetSwitch /*=false*/, bool includingCast /*=false*/)
 {
+    // interrupt cast only id includingCast == true and we have something to interrupt.
     if (includingCast && IsNonMeleeSpellCasted(false))
         InterruptNonMeleeSpells(false);
 
-    if (!m_attacking)
-        return;
-
-    Unit* victim = m_attacking;
-
-    m_attacking->_removeAttacker(this);
-    m_attacking = nullptr;
-
-    // Clear our target
-    SetTargetGuid(ObjectGuid());
+    // Clear our target only if targetSwitch == true
+    if (targetSwitch)
+        SetTargetGuid(ObjectGuid());
 
     clearUnitState(UNIT_STAT_MELEE_ATTACKING);
 
     InterruptSpell(CURRENT_MELEE_SPELL);
 
-    // reset only at real combat stop
-    if (!targetSwitch && GetTypeId() == TYPEID_UNIT)
+    if (m_attacking)
     {
-        ((Creature*)this)->SetNoCallAssistance(false);
+        SendMeleeAttackStop(m_attacking);
 
-        if (((Creature*)this)->HasSearchedAssistance())
-        {
-            ((Creature*)this)->SetNoSearchAssistance(false);
-            UpdateSpeed(MOVE_RUN, false);
-        }
+        m_attacking->_removeAttacker(this);
+        m_attacking = nullptr;
     }
-
-    SendMeleeAttackStop(victim);
 }
 
 void Unit::CombatStop(bool includingCast)
@@ -5114,8 +5093,19 @@ void Unit::CombatStop(bool includingCast)
 
     if (GetTypeId() == TYPEID_PLAYER)
         ((Player*)this)->SendAttackSwingCancelAttack();     // melee and ranged forced attack cancel
-    else if (((Creature*)this)->GetTemporaryFactionFlags() & TEMPFACTION_RESTORE_COMBAT_STOP)
-        ((Creature*)this)->ClearTemporaryFaction();
+    else
+    {
+        ((Creature*)this)->SetNoCallAssistance(false);
+
+        if (((Creature*)this)->HasSearchedAssistance())
+        {
+            ((Creature*)this)->SetNoSearchAssistance(false);
+            UpdateSpeed(MOVE_RUN, false);
+        }
+
+        if (((Creature*)this)->GetTemporaryFactionFlags() & TEMPFACTION_RESTORE_COMBAT_STOP)
+            ((Creature*)this)->ClearTemporaryFaction();
+    }
 
     ClearInCombat();
 }

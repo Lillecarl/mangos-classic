@@ -99,11 +99,13 @@ void PetAI::UpdateAI(const uint32 diff)
     Unit* owner = m_creature->GetCharmerOrOwner();
     Unit* victim = nullptr;
 
+    if (!((Pet*)m_creature)->isControlled())
+        m_creature->SelectHostileTarget();
+
     // Creature pets and guardians will always look in threat list for victim
     if (!(m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE)
         || (m_creature->IsPet() && ((Pet*)m_creature)->GetModeFlags() & PET_MODE_DISABLE_ACTIONS)))
-        victim = ((Pet*)m_creature)->isControlled() ? m_creature->getVictim()
-            : m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 0);
+        victim = m_creature->getVictim();
 
     if (m_updateAlliesTimer <= diff)
         // UpdateAllies self set update timer
@@ -113,7 +115,7 @@ void PetAI::UpdateAI(const uint32 diff)
 
     if (inCombat && !victim)
     {
-        m_creature->AttackStop(true, false);
+        m_creature->AttackStop(true, true);
         inCombat = false;
     }
 
@@ -220,9 +222,9 @@ void PetAI::UpdateAI(const uint32 diff)
 
             Spell* spell = new Spell(m_creature, spellInfo, false);
 
-            if (inCombat && !m_creature->hasUnitState(UNIT_STAT_FOLLOW) && spell->CanAutoCast(m_creature->getVictim()))
+            if (inCombat && !m_creature->hasUnitState(UNIT_STAT_FOLLOW) && spell->CanAutoCast(victim))
             {
-                targetSpellStore.push_back(TargetSpellList::value_type(m_creature->getVictim(), spell));
+                targetSpellStore.push_back(TargetSpellList::value_type(victim, spell));
                 continue;
             }
             else
@@ -282,21 +284,24 @@ void PetAI::UpdateAI(const uint32 diff)
         for (TargetSpellList::const_iterator itr = targetSpellStore.begin(); itr != targetSpellStore.end(); ++itr)
             delete itr->second;
     }
-    else if (m_creature->hasUnitState(UNIT_STAT_FOLLOW_MOVE))
-        m_creature->InterruptNonMeleeSpells(false);
 
-    // Creature pets and guardians will always look in threat list for victim
+    // Guardians will always look in threat list for victim
+    if (!((Pet*)m_creature)->isControlled())
+        m_creature->SelectHostileTarget();
+
     if (!(m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE)
         || (m_creature->IsPet() && ((Pet*)m_creature)->GetModeFlags() & PET_MODE_DISABLE_ACTIONS)))
-        victim = ((Pet*)m_creature)->isControlled() ? m_creature->getVictim()
-            : m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 0);
+        victim = m_creature->getVictim();
+
+    // Stop here if casting spell (No melee and no movement)
+    if (m_creature->IsNonMeleeSpellCasted(false))
+        return;
 
     if (victim)
     {
         // i_pet.getVictim() can't be used for check in case stop fighting, i_pet.getVictim() clear at Unit death etc.
         // This is needed for charmed creatures, as once their target was reset other effects can trigger threat
-        if ((m_creature->isCharmed() && victim == m_creature->GetCharmer())
-            || !victim->isTargetableForAttack())
+        if ((m_creature->isCharmed() && victim == m_creature->GetCharmer()) || !victim->isTargetableForAttack())
         {
             DEBUG_FILTER_LOG(LOG_FILTER_AI_AND_MOVEGENSS, "PetAI (guid = %u) is stopping attack.", m_creature->GetGUIDLow());
             m_creature->CombatStop();
@@ -304,11 +309,6 @@ void PetAI::UpdateAI(const uint32 diff)
             
             return;
         }
-
-        // required to be stopped cases
-        if (m_creature->IsStopped() && m_creature->IsNonMeleeSpellCasted(false)
-            && m_creature->hasUnitState(UNIT_STAT_FOLLOW_MOVE))
-            m_creature->InterruptNonMeleeSpells(false);
 
         // if pet misses its target, it will also be the first in threat list
         if (!(m_creature->GetCreatureInfo()->ExtraFlags & CREATURE_EXTRA_FLAG_NO_MELEE)
@@ -334,6 +334,7 @@ void PetAI::UpdateAI(const uint32 diff)
     else if (owner)
     {
         CharmInfo* charmInfo = m_creature->GetCharmInfo();
+
         if (owner->isInCombat() && !(m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE)
             || (charmInfo && charmInfo->HasReactState(REACT_PASSIVE))))
             AttackStart(owner->getAttackerForHelper());
