@@ -361,6 +361,7 @@
     <ClCompile Include="..\..\src\game\CombatHandler.cpp" />
     <ClCompile Include="..\..\src\game\ConfusedMovementGenerator.cpp" />
     <ClCompile Include="..\..\src\game\Corpse.cpp" />
+    <ClCompile Include="..\..\src\game\CPlayer.cpp" />
     <ClCompile Include="..\..\src\game\Creature.cpp" />
     <ClCompile Include="..\..\src\game\CreatureAI.cpp" />
     <ClCompile Include="..\..\src\game\CreatureAIRegistry.cpp" />
@@ -510,6 +511,7 @@
     <ClInclude Include="..\..\src\game\Chat.h" />
     <ClInclude Include="..\..\src\game\ConfusedMovementGenerator.h" />
     <ClInclude Include="..\..\src\game\Corpse.h" />
+    <ClInclude Include="..\..\src\game\CPlayer.h" />
     <ClInclude Include="..\..\src\game\Creature.h" />
     <ClInclude Include="..\..\src\game\CreatureAI.h" />
     <ClInclude Include="..\..\src\game\CreatureAIImpl.h" />

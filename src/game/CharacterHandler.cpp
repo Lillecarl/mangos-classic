@@ -40,6 +40,8 @@
 #include "Chat.h"
 #include "SpellMgr.h"
 
+#include "CPlayer.h"
+
 // config option SkipCinematics supported values
 enum CinematicsSkipMode
 {
@@ -327,7 +329,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recv_data)
         }
     }
 
-    Player* pNewChar = new Player(this);
+    Player* pNewChar = new CPlayer(this);
     if (!pNewChar->Create(sObjectMgr.GeneratePlayerLowGuid(), name, race_, class_, gender, skin, face, hairStyle, hairColor, facialHair, outfitId))
     {
         // Player not create (race/class problem?)
@@ -444,7 +446,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
 {
     ObjectGuid playerGuid = holder->GetGuid();
 
-    Player* pCurrChar = new Player(this);
+    Player* pCurrChar = new CPlayer(this);
     pCurrChar->GetMotionMaster()->Initialize();
 
     // "GetAccountId()==db stored account id" checked in LoadFromDB (prevent login not own character using cheating tools)

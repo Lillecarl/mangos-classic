@@ -42,6 +42,11 @@ include_directories(
   ${CMAKE_BINARY_DIR}/src/shared
 )
 
+set(SRC_GRP_CUSTOM
+    CPlayer.cpp
+    CPlayer.h
+)
+
 set(SRC_GRP_AHBOT
     AuctionHouseBot/AuctionHouseBot.cpp
     AuctionHouseBot/AuctionHouseBot.h
@@ -369,6 +374,7 @@ set(SRC_GRP_WORLD_HANDLERS
 )
 
 set(LIBRARY_SRCS
+    ${SRC_GRP_CUSTOM}
     ${SRC_GRP_AHBOT}
     ${SRC_GRP_BATTLEGROUND}
     ${SRC_GRP_CHAT_COMMANDS}
@@ -383,6 +389,11 @@ set(LIBRARY_SRCS
     ${SRC_GRP_WORLD_HANDLERS}
     pchdef.cpp
     pchdef.h
+)
+
+source_group("Custom"
+  FILES
+    ${SRC_GRP_CUSTOM}
 )
 
 source_group("AhBot"

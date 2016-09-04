@@ -37,6 +37,12 @@
     <Filter Include="BattleGround">
       <UniqueIdentifier>{0af4d063-6d01-4546-a429-59bd828ab270}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Custom">
+      <UniqueIdentifier>{0997271f-7ed2-484a-8a94-b8c49db8b796}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Custom\Object">
+      <UniqueIdentifier>{8830eaca-feb9-4f87-8664-2bb6227256d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\game\AccountMgr.cpp">
@@ -475,6 +481,9 @@
     <ClCompile Include="..\..\src\game\AddonHandler.cpp">
       <Filter>World/Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\game\CPlayer.cpp">
+      <Filter>Custom\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\game\AccountMgr.h">
@@ -909,6 +918,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\game\AddonHandler.h">
       <Filter>World/Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\game\CPlayer.h">
+      <Filter>Custom\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
