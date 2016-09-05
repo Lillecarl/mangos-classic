@@ -43,6 +43,9 @@
     <Filter Include="Custom\Object">
       <UniqueIdentifier>{8830eaca-feb9-4f87-8664-2bb6227256d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Custom\Chat">
+      <UniqueIdentifier>{ca8b2805-8e0d-4b9e-b96d-9eac92416235}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\game\AccountMgr.cpp">
@@ -483,6 +486,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\game\CPlayer.cpp">
       <Filter>Custom\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\game\CCommands.cpp">
+      <Filter>Custom\Chat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

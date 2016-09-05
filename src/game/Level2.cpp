@@ -51,6 +51,8 @@
 #include "PathFinder.h"                                     // for mmap commands
 #include "movement/MoveSplineInit.h"
 
+#include "CPlayer.h"
+
 #include <fstream>
 #include <map>
 #include <typeinfo>
@@ -790,7 +792,7 @@ bool ChatHandler::HandleGameObjectTargetCommand(char* args)
     else
     {
         std::ostringstream eventFilter;
-        eventFilter << " AND (event IS nullptr ";
+        eventFilter << " AND (event IS null ";
         bool initString = true;
 
         for (GameEventMgr::ActiveEvents::const_iterator itr = activeEventsList.begin(); itr != activeEventsList.end(); ++itr)
@@ -864,6 +866,8 @@ bool ChatHandler::HandleGameObjectTargetCommand(char* args)
 
     if (target)
     {
+        m_session->GetPlayer()->ToCPlayer()->SetTargetGob(target->GetObjectGuid());
+
         time_t curRespawnDelay = target->GetRespawnTimeEx() - time(nullptr);
         if (curRespawnDelay < 0)
             curRespawnDelay = 0;
@@ -886,19 +890,24 @@ bool ChatHandler::HandleGameObjectTargetCommand(char* args)
 // delete object by selection or guid
 bool ChatHandler::HandleGameObjectDeleteCommand(char* args)
 {
+    bool fail = false;
     // number or [name] Shift-click form |color|Hgameobject:go_guid|h[name]|h|r
     uint32 lowguid;
     if (!ExtractUint32KeyFromLink(&args, "Hgameobject", lowguid))
-        return false;
+        fail = true;
 
     if (!lowguid)
-        return false;
+        fail = true;
 
-    GameObject* obj = nullptr;
+    GameObject* obj = m_session->GetPlayer()->ToCPlayer()->GetTargetGob();
+
+    if (!obj && fail)
+        return false;
 
     // by DB guid
     if (GameObjectData const* go_data = sObjectMgr.GetGOData(lowguid))
-        obj = GetGameObjectWithGuid(lowguid, go_data->id);
+        if (!obj)
+            obj = GetGameObjectWithGuid(lowguid, go_data->id);
 
     if (!obj)
     {

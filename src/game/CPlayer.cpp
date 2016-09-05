@@ -4,6 +4,7 @@
 
 CPlayer::CPlayer(WorldSession* session) : Player(session)
 {
+    m_SelectedGobGuid = ObjectGuid();
 }
 
 CPlayer::~CPlayer()
