@@ -116,6 +116,10 @@ class WorldUpdateCounter
         uint32 m_tmStart;
 };
 
+class CPlayer;
+class Item;
+class Bag;
+
 class MANGOS_DLL_SPEC Object
 {
     public:
@@ -167,6 +171,36 @@ class MANGOS_DLL_SPEC Object
         virtual void BuildUpdateData(UpdateDataMapType& update_players);
         void MarkForClientUpdate();
         void SendForcedObjectUpdate();
+
+		Object* ToObject() { if (GetTypeId() == TYPEID_OBJECT) return reinterpret_cast<Object*>(this); else return nullptr; }
+		Object const* ToObject() const { if (GetTypeId() == TYPEID_OBJECT) return reinterpret_cast<Object const*>(this); else return nullptr; }
+
+		Item* ToItem() { if (GetTypeId() == TYPEID_ITEM) return reinterpret_cast<Item*>(this); else return nullptr; }
+		Item const* ToItem() const { if (GetTypeId() == TYPEID_ITEM) return reinterpret_cast<Item const*>(this); else return nullptr; }
+
+		Bag* ToBag() { if (GetTypeId() == TYPEID_CONTAINER) return reinterpret_cast<Bag*>(this); else return nullptr; }
+		Bag const* ToBag() const { if (GetTypeId() == TYPEID_CONTAINER) return reinterpret_cast<Bag const*>(this); else return nullptr; }
+
+		Creature* ToCreature() { if (GetTypeId() == TYPEID_UNIT) return reinterpret_cast<Creature*>(this); else return nullptr; }
+		Creature const* ToCreature() const { if (GetTypeId() == TYPEID_UNIT) return reinterpret_cast<Creature const*>(this); else return nullptr; }
+
+		Player* ToPlayer() { if (GetTypeId() == TYPEID_PLAYER) return reinterpret_cast<Player*>(this); else return nullptr; }
+		Player const* ToPlayer() const { if (GetTypeId() == TYPEID_PLAYER) return reinterpret_cast<Player const*>(this); else return nullptr; }
+
+		CPlayer* ToCPlayer() { if (GetTypeId() == TYPEID_PLAYER) return reinterpret_cast<CPlayer*>(this); else return nullptr; }
+		CPlayer const* ToCPlayer() const { if (GetTypeId() == TYPEID_PLAYER) return reinterpret_cast<CPlayer const*>(this); else return nullptr; }
+
+		GameObject* ToGameObject() { if (GetTypeId() == TYPEID_GAMEOBJECT) return reinterpret_cast<GameObject*>(this); else return nullptr; }
+		GameObject const* ToGameObject() const { if (GetTypeId() == TYPEID_GAMEOBJECT) return reinterpret_cast<GameObject const*>(this); else return nullptr; }
+
+		Corpse* ToCorpse() { if (GetTypeId() == TYPEID_CORPSE) return reinterpret_cast<Corpse*>(this); else return nullptr; }
+		Corpse const* ToCorpse() const { if (GetTypeId() == TYPEID_CORPSE) return reinterpret_cast<Corpse const*>(this); else return nullptr; }
+
+		DynamicObject* ToDynObject() { if (GetTypeId() == TYPEID_DYNAMICOBJECT) return reinterpret_cast<DynamicObject*>(this); else return nullptr; }
+		DynamicObject const* ToDynObject() const { if (GetTypeId() == TYPEID_DYNAMICOBJECT) return reinterpret_cast<DynamicObject const*>(this); else return nullptr; }
+
+		Unit* ToUnit() { if (isType(TYPEMASK_UNIT)) return reinterpret_cast<Unit*>(this); else return nullptr; }
+		Unit const* ToUnit() const { if (isType(TYPEMASK_UNIT)) return reinterpret_cast<Unit const*>(this); else return nullptr; }
 
         void BuildValuesUpdateBlockForPlayer(UpdateData* data, Player* target) const;
         void BuildOutOfRangeUpdateBlock(UpdateData* data) const;
