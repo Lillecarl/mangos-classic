@@ -36,7 +36,7 @@ void WorldSession::HandleLearnTalentOpcode(WorldPacket& recv_data)
     if (_player->GetPet())
         _player->GetPet()->CastOwnerTalentAuras();
 
-	_player->ToCPlayer()->learnAvailableSpells();
+    _player->ToCPlayer()->learnAvailableSpells();
 }
 
 void WorldSession::HandleTalentWipeConfirmOpcode(WorldPacket& recv_data)

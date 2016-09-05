@@ -666,7 +666,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
     if (!pCurrChar->IsStandState() && !pCurrChar->hasUnitState(UNIT_STAT_STUNNED))
         pCurrChar->SetStandState(UNIT_STAND_STATE_STAND);
 
-	pCurrChar->ToCPlayer()->OnLogin();
+    pCurrChar->ToCPlayer()->OnLogin();
 
     m_playerLoading = false;
     delete holder;
