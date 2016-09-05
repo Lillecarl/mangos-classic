@@ -9,9 +9,12 @@ public:
 	explicit CPlayer(WorldSession* session);
 	~CPlayer();
 
-
+	void OnUpdate(uint32 update_diff, uint32 time);
+	void OnLogin();
+	void learnAvailableSpells();
 protected:
 private:
+	
 };
 
 #endif

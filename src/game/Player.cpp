@@ -61,6 +61,8 @@
 #include "SQLStorages.h"
 #include "LootMgr.h"
 
+#include "CPlayer.h"
+
 #include <cmath>
 
 #define ZONE_UPDATE_INTERVAL (1*IN_MILLISECONDS)
@@ -1096,6 +1098,8 @@ void Player::Update(uint32 update_diff, uint32 p_time)
 {
     if (!IsInWorld())
         return;
+
+	ToCPlayer()->OnUpdate(update_diff, p_time);
 
     // Undelivered mail
     if (m_nextMailDelivereTime && m_nextMailDelivereTime <= time(nullptr))
