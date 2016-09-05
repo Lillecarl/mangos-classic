@@ -45,7 +45,7 @@ include_directories(
 set(SRC_GRP_CUSTOM
     CPlayer.cpp
     CPlayer.h
-	CChat.cpp
+	CCommands.cpp
 )
 
 set(SRC_GRP_AHBOT
