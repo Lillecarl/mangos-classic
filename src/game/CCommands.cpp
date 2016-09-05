@@ -1,5 +1,6 @@
 #include "Chat.h"
 #include "CPlayer.h"
+#include "GameObject.h"
 
 bool ChatHandler::HandleGobAppear(char* args)
 {
