@@ -248,7 +248,7 @@ void Weather::SetWeather(WeatherType type, float grade, Map const* _map, bool is
     if (m_type == type && m_grade == grade)
         return;
 
-    m_type = type;
+    m_type = WEATHER_TYPE_FINE;
     m_grade = grade;
     SendWeatherForPlayersInZone(_map);
 }
